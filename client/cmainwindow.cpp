@@ -15,6 +15,7 @@ void CMainWindow::render(QPainter* painter) {
 void CMainWindow::render() {
 	if(!m_device)
 		m_device = new QOpenGLPaintDevice;
+    glClearColor(0.0f, 0.0f, 255.0f, 10.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     m_device->setSize(size());
     QPainter painter(m_device);
