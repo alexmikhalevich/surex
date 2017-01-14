@@ -9,6 +9,6 @@ void CQuadtree::init(QScopedPointer<CSettings>& settings_ptr) {
 
 }
 
-void CQuadtree::lod_select(CSelection& selection) {
+void CQuadtree::select(CSelection& selection) {
 
 }

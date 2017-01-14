@@ -13,7 +13,7 @@ namespace CDLOD {
     public:
         CQuadtree();
         void init(QScopedPointer<CSettings>& settings_ptr);
-        void lod_select(CSelection& selection);
+        void select(CSelection& selection);
     };
 }
 
