@@ -17,6 +17,7 @@ namespace Math {
         void set_distance(qreal distance);
         qreal distance(const QVector3D& point) const;
         bool front_facing(const QVector3D& direction) const;
+        QVector3D normal() const;
     };
 
     class CBoundingBox {
@@ -44,6 +45,7 @@ namespace Math {
         CBoundingFrustum() {}
         CBoundingFrustum(const QMatrix4x4& modelviewproj);
         void from_matrix(const QMatrix4x4& modelviewproj);
+        CPlane plane_at(int index) const;
     };
 
     class CBoundingSphere {
@@ -54,6 +56,8 @@ namespace Math {
         CBoundingSphere() : m_center(QVector3D(0.0, 0.0, 0.0)), m_radius(0.0) {}
         CBoundingSphere(const QVector3D& center, qreal radius) : m_center(center), m_radius(radius) {}
         ~CBoundingSphere() {}
+        QVector3D center() const;
+        qreal radius() const;
     };
 
     class CCollision {
@@ -63,7 +67,7 @@ namespace Math {
             NONE
         };
         static inline ECollisionType contains(const CBoundingBox& box_1, const CBoundingBox& box_2);
-        static inline ECollisionType contains(const CBoundingBox& box, const CBoundingFrustum& frustrum);
+        static inline ECollisionType contains(const CBoundingBox& box, const CBoundingFrustum& frustum);
         static inline bool intersects(const CBoundingBox& box, const CBoundingSphere& sphere);
     };
 }

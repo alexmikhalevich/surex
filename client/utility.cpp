@@ -111,6 +111,18 @@ qreal CPlane::distance(const QVector3D& point) const {
     return QVector3D::dotProduct(point, m_normal) + m_distance;
 }
 
+QVector3D CPlane::normal() const {
+    return m_normal;
+}
+
+QVector3D CBoundingSphere::center() const {
+    return m_center;
+}
+
+qreal CBoundingSphere::radius() const {
+    return m_radius;
+}
+
 CBoundingFrustum::CBoundingFrustum(const QMatrix4x4& modelviewproj) {
     from_matrix(modelviewproj);
 }
@@ -151,4 +163,50 @@ void CBoundingFrustum::from_matrix(const QMatrix4x4& modelviewproj) {
                            modelviewproj.row(1).w() + modelviewproj.row(1).z(),
                            modelviewproj.row(2).w() + modelviewproj.row(2).z()));
     m_planes[5].set_distance(QVector3D(modelviewproj.row(3).w() + modelviewproj.row(3).z()));
+}
+
+CPlane CBoundingFrustum::plane_at(int index) const {
+    if(index >= 0 && index < 6)
+        return m_planes[index];
+}
+
+CCollision::ECollisionType CCollision::contains(const CBoundingBox& box_1, const CBoundingBox& box_2) {
+    qreal bottom_1 = box_1.center().y() - box_1.half_size().y();
+    qreal top_1 = box_1.center().y() + box_1.half_size().y();
+    qreal left_1 = box_1.center().x() - box_1.half_size().x();
+    qreal right_1 = box_1.center().x() + box_1.half_size().x();
+    qreal near_1 = box_1.center().z() - box_1.half_size().z();
+    qreal far_1 = box_1.center().z() + box_1.half_size().z();
+
+    qreal bottom_2 = box_2.center().y() - box_2.half_size().y();
+    qreal top_2 = box_2.center().y() + box_2.half_size().y();
+    qreal left_2 = box_2.center().x() - box_2.half_size().x();
+    qreal right_2 = box_2.center().x() + box_2.half_size().x();
+    qreal near_2 = box_2.center().z() - box_2.half_size().z();
+    qreal far_2 = box_2.center().z() + box_2.half_size().z();
+
+    if(top_1 > bottom_2 && bottom_1 < top_2 && left_1 < right_2 && right_1 > left_2 && far_1 > near_2 && near_1 < far_2) {
+        if(top_1 >= top_2 && bottom_1 <= top_2 && left_1 <= left_2 && right_1 >= right_2 && near_1 <= near_2 && far_1 >= far_2) {
+            return ECollisionType::CONTAINS;
+        }
+        return ECollisionType::INTERSECTS;
+    }
+    return ECollisionType::NONE;
+}
+
+CCollision::ECollisionType CCollision::contains(const CBoundingBox& box, const CBoundingFrustum& frustum) {
+    for(int i = 0; i < 6; ++i) {
+        QVector3D vertex;
+        box.vertex_positive(frustum.plane_at(i).normal(), vertex);
+        if(frustum.plane_at(i).distance(vertex) < 0)
+            return ECollisionType::NONE;
+        box.vertex_negative(frustum.plane_at(i).normal(), vertex);
+        if(frustum.plane_at(i).distance(vertex) < 0)
+            return ECollisionType::INTERSECTS;
+    }
+    return ECollisionType::CONTAINS;
+}
+
+bool CCollision::intersects(const CBoundingBox& box, const CBoundingSphere& sphere) {
+    return box.min_distance_squared(sphere.center()) <= sphere.radius() * sphere.radius();
 }
