@@ -195,6 +195,7 @@ CCollision::ECollisionType CCollision::contains(const CBoundingBox& box_1, const
 }
 
 CCollision::ECollisionType CCollision::contains(const CBoundingBox& box, const CBoundingFrustum& frustum) {
+    ECollisionType result = ECollisionType::CONTAINS;
     for(int i = 0; i < 6; ++i) {
         QVector3D vertex;
         box.vertex_positive(frustum.plane_at(i).normal(), vertex);
@@ -202,9 +203,9 @@ CCollision::ECollisionType CCollision::contains(const CBoundingBox& box, const C
             return ECollisionType::NONE;
         box.vertex_negative(frustum.plane_at(i).normal(), vertex);
         if(frustum.plane_at(i).distance(vertex) < 0)
-            return ECollisionType::INTERSECTS;
+            result = ECollisionType::INTERSECTS;
     }
-    return ECollisionType::CONTAINS;
+    return result;
 }
 
 bool CCollision::intersects(const CBoundingBox& box, const CBoundingSphere& sphere) {
