@@ -99,6 +99,10 @@ void CPlane::set_normal(const QVector3D& normal) {
     m_normal = normal;
 }
 
+void CPlane::set_distance(qreal distance) {
+    m_distance = distance;
+}
+
 bool CPlane::front_facing(const QVector3D& direction) const {
     return (QVector3D::dotProduct(direction, _normal) <= 0);
 }
@@ -107,10 +111,44 @@ qreal CPlane::distance(const QVector3D& point) const {
     return QVector3D::dotProduct(point, m_normal) + m_distance;
 }
 
-CBoundingFrustum::CBoundingFrustum(const QMatrix4x4& matrix) {
-    from_matrix(matrix);
+CBoundingFrustum::CBoundingFrustum(const QMatrix4x4& modelviewproj) {
+    from_matrix(modelviewproj);
 }
 
-void CBoundingFrustum::from_matrix(const QMatrix4x4& matrix) {
+void CBoundingFrustum::from_matrix(const QMatrix4x4& modelviewproj) {
+    //left plane
+    m_planes[0].set_normal(QVector3D(modelviewproj.row(0).w() + modelviewproj.row(0).x(),
+                           modelviewproj.row(1).w() + modelviewproj.row(1).x(),
+                           modelviewproj.row(2).w() + modelviewproj.row(2).x()));
+    m_planes[0].set_distance(QVector3D(modelviewproj.row(3).w() + modelviewproj.row(3).x()));
 
+    //right plane
+    m_planes[1].set_normal(QVector3D(modelviewproj.row(0).w() - modelviewproj.row(0).x(),
+                           modelviewproj.row(1).w() - modelviewproj.row(1).x(),
+                           modelviewproj.row(2).w() - modelviewproj.row(2).x()));
+    m_planes[1].set_distance(QVector3D(modelviewproj.row(3).w() - modelviewproj.row(3).x()));
+
+    //top plane
+    m_planes[2].set_normal(QVector3D(modelviewproj.row(0).w() - modelviewproj.row(0).y(),
+                           modelviewproj.row(1).w() - modelviewproj.row(1).y(),
+                           modelviewproj.row(2).w() - modelviewproj.row(2).y()));
+    m_planes[2].set_distance(QVector3D(modelviewproj.row(3).w() - modelviewproj.row(3).y()));
+
+    //bottom plane
+    m_planes[3].set_normal(QVector3D(modelviewproj.row(0).w() + modelviewproj.row(0).y(),
+                           modelviewproj.row(1).w() + modelviewproj.row(1).y(),
+                           modelviewproj.row(2).w() + modelviewproj.row(2).y()));
+    m_planes[3].set_distance(QVector3D(modelviewproj.row(3).w() + modelviewproj.row(3).y()));
+
+    //near plane
+    m_planes[4].set_normal(QVector3D(modelviewproj.row(0).z(),
+                           modelviewproj.row(1).z(),
+                           modelviewproj.row(2).z()));
+    m_planes[4].set_distance(QVector3D(modelviewproj.row(3).z()));
+
+    //far plane
+    m_planes[5].set_normal(QVector3D(modelviewproj.row(0).w() + modelviewproj.row(0).z(),
+                           modelviewproj.row(1).w() + modelviewproj.row(1).z(),
+                           modelviewproj.row(2).w() + modelviewproj.row(2).z()));
+    m_planes[5].set_distance(QVector3D(modelviewproj.row(3).w() + modelviewproj.row(3).z()));
 }

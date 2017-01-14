@@ -2,17 +2,19 @@
 #define UTILITY_H
 
 #include <qt5/QtGui/QVector3D>
+#include <qt5/QtGui/QMatrix4x4>
 
 namespace Math {
     class CPlane {
     private:
         QVector3D m_normal;
-        QVector3D m_distance;
+        qreal m_distance;
     public:
         CPlane() : m_normal(QVector3D(0.0, 0.0, 0.0)), m_distance(QVector3D(0.0, 0.0, 0.0)) {}
         CPlane(const QVector3D& normal, const QVector3D distance) : m_normal(normal), m_distance(distance) {}
         ~CPlane() {}
         void set_normal(const QVector3D& normal);
+        void set_distance(qreal distance);
         qreal distance(const QVector3D& point) const;
         bool front_facing(const QVector3D& direction) const;
     };
@@ -40,8 +42,8 @@ namespace Math {
         CPlane m_planes[6];
     public:
         CBoundingFrustum() {}
-        CBoundingFrustum(const QMatrix4x4& matrix);
-        void from_matrix(const QMatrix4x4& matrix);
+        CBoundingFrustum(const QMatrix4x4& modelviewproj);
+        void from_matrix(const QMatrix4x4& modelviewproj);
     };
 
     class CBoundingSphere {
