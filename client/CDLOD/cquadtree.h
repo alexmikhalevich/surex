@@ -5,6 +5,7 @@
 #include "csettings.h"
 #include "cselection.h"
 #include "cquadtreenode.h"
+#include "utility.h"
 
 namespace CDLOD {
     class CQuadtree {
