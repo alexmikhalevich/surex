@@ -19,3 +19,7 @@ qreal CSettings::visibility_range(short level) const {
 int CSettings::max_selection_size() const {
     return m_max_selection_size;
 }
+
+qreal CSettings::lod_level_distance_ratio() const {
+    return m_lod_level_distance_ratio;
+}
