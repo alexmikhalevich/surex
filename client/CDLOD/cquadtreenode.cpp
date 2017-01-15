@@ -53,9 +53,14 @@ ESelectionResult CQuadtreeNode::select(CSelection& selection, bool parent_in_fru
     if(!(remove_top_left && remove_top_right && remove_bottom_left && remove_bottom_right)
             && selection.selection_size() < selection.max_selection_size()) {
         short lod_level = selection.max_lod_level() - m_level;
+        //FIXME: do we really need to create new CQuadtreeNode? Maybe it's possible to push _this_ to the selection
         selection.push_node(QSharedPointer<CQuadtreeNode>(new CQuadtreeNode(lod_level, selection.settings())));
-        if(m_level != 0) {
 
+        if(m_level != 0) {
+            qreal camera_distance = qSqrt(bounding_box.max_distance_squared(selection.observer_position()));
+            qreal morph_start = selection.morph_start(selection.max_lod_level() - m_level + 1);
+            if(camera_distance > morph_start)
+                selection.set_small_visible_distance(true);
         }
         return ESelectionResult::SELECTED;
     }

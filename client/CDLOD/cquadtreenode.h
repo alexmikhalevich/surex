@@ -1,6 +1,7 @@
 #ifndef CQUADTREENODE_H
 #define CQUADTREENODE_H
 
+#include <qt5/QtCore/qmath.h>
 #include "cselection.h"
 
 namespace CDLOD {
