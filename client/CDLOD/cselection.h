@@ -2,11 +2,13 @@
 #define CSELECTION_H
 
 #include <qt5/QtCore/QSharedPointer>
+#include <qt5/QtCore/QVector>
 #include "utility.h"
 #include "ccamera.h"
 #include "csettings.h"
 
 namespace CDLOD {
+    class CQuadtreeNode;
     /*!
      * \brief The CSelection class
      * Represents the current selection which will be rendered and contains all information needed to
@@ -16,6 +18,7 @@ namespace CDLOD {
     private:
         QSharedPointer<CCamera> m_camera;
         QSharedPointer<CSettings> m_settings;
+        QVector<QSharedPointer<CQuadtreeNode>> m_selection;
         int m_size;
     public:
         CSelection();
@@ -45,6 +48,16 @@ namespace CDLOD {
          * \return     maximum selection size
          */
         int max_selection_size() const;
+        /*!
+         * \brief      Add the given node to the selection
+         * \param[in]  node_ptr the given node
+         */
+        void push_node(QSharedPointer<CQuadtreeNode>& node_ptr);
+        /*!
+         * \brief Returns pointer to the CSettings instance
+         * \return pointer to the CSettings instance
+         */
+        QSharedPointer<CSettings> settings();
     };
 }
 

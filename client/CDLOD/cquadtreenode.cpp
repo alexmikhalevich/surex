@@ -2,7 +2,14 @@
 
 using namespace CDLOD;
 
-CQuadtreeNode::CQuadtreeNode() {}
+CQuadtreeNode::CQuadtreeNode(short level, const CSettings& settings) {
+    m_level = level;
+    //TODO
+}
+
+Math::CBoundingBox CQuadtreeNode::_bounding_box(int xsize, int ysize) {
+    //TODO
+}
 
 ESelectionResult CQuadtreeNode::select(CSelection& selection, bool parent_in_frustum) {
     Math::CBoundingBox bounding_box = get_bounding_box();
@@ -46,5 +53,15 @@ ESelectionResult CQuadtreeNode::select(CSelection& selection, bool parent_in_fru
     if(!(remove_top_left && remove_top_right && remove_bottom_left && remove_bottom_right)
             && selection.selection_size() < selection.max_selection_size()) {
         short lod_level = selection.max_lod_level() - m_level;
+        selection.push_node(QSharedPointer<CQuadtreeNode>(new CQuadtreeNode(lod_level, selection.settings())));
+        if(m_level != 0) {
+
+        }
+        return ESelectionResult::SELECTED;
     }
+    if(top_left_result == ESelectionResult::SELECTED || top_right_result == ESelectionResult::SELECTED
+            || bottom_left_result == ESelectionResult::SELECTED || bottom_right_result == ESelectionResult::SELECTED) {
+        return ESelectionResult::SELECTED;
+    }
+    return ESelectionResult::OUT_OF_FRUSTUM;
 }

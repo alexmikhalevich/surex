@@ -18,9 +18,17 @@ short CSelection::max_lod_level() const {
 }
 
 int CSelection::selection_size() const {
-    return m_size;
+    return m_selection.size();
 }
 
 int CSelection::max_selection_size() const {
     return m_settings->max_selection_size();
+}
+
+void CSelection::push_node(QSharedPointer<CQuadtreeNode>& node_ptr) {
+    m_selection.push_back(node_ptr);
+}
+
+QSharedPointer<CSettings> CSelection::settings() {
+    return m_settings;
 }
