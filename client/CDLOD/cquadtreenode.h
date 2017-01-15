@@ -29,7 +29,7 @@ namespace CDLOD {
 
         Math::CBoundingBox _bounding_box(int xsize, int ysize);
     public:
-        CQuadtreeNode(const CSettings& settings);
+        CQuadtreeNode() {}
         /*!
          * Recursively traverses the quadtree to create a subset of nodes representing the currently observable part of the terrain
          * \param[out]  selection          CSelection instance which contains all information needed to render the terrain

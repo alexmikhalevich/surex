@@ -2,11 +2,6 @@
 
 using namespace CDLOD;
 
-CQuadtreeNode::CQuadtreeNode(const CSettings& settings) {
-    m_level = level;
-    //TODO
-}
-
 Math::CBoundingBox CQuadtreeNode::_bounding_box(int xsize, int ysize) {
     //TODO
 }
