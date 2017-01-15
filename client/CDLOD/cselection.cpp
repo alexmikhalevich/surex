@@ -33,9 +33,9 @@ QSharedPointer<CSettings> CSelection::settings() {
     return m_settings;
 }
 
-void CSelection::set_small_visible_distance(bool value) {
-    m_small_visible_distance = value;
-}
+//void CSelection::set_small_visible_distance(bool value) {
+//    m_small_visible_distance = value;
+//}
 
 qreal CSelection::morph_start(short level) {
 

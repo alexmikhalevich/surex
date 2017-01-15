@@ -8,19 +8,43 @@
 #include "csettings.h"
 
 namespace CDLOD {
-    class CQuadtreeNode;
     /*!
      * \brief The CSelection class
      * Represents the current selection which will be rendered and contains all information needed to
      * render the terrain.
      */
     class CSelection {
+    public:
+        /*!
+         * \brief The CSelectionNode class
+         * We do not want to store any data in CQuadtreeNode class because it is too expensive.
+         * Instead of this, we are going to store all necessary data only for nodes, selected
+         * for rendering. Despite the seeming similarity with the CQuadtreeNode class, the
+         * CSelectionNode class is completely different. It does not represent the quadtree node
+         * exactly but stores all necessary data for rendering.
+         */
+        class CSelectionNode {
+        private:
+            unsigned int m_x;               ///< x-coordinate of the top left corner
+            unsigned int m_y;               ///< y-coordinate of the top left corner
+            unsigned int m_lod;             ///< Level of detail for this node
+            bool m_top_left;                ///< True if top left child in the corresponding CQuadtreeNode exists
+            bool m_top_right;               ///< True if top right child in the corresponding CQuadtreeNode exists
+            bool m_bottom_left;             ///< True if bottom left child in the corresponding CQuadtreeNode exists
+            bool m_bottom_right;            ///< True if bottom right child in the corresponding CQuadtreeNode exists
+        public:
+            CSelectionNode() {}
+            CSelectionNode(unsigned int x, unsigned int y, unsigned int lod, bool top_left, bool top_right,
+                           bool bottom_left, bool bottom_right);
+            Math::CBoundingBox bounding_box(int xsize, int ysize) const;
+        };
+
     private:
         QSharedPointer<CCamera> m_camera;
         QSharedPointer<CSettings> m_settings;
-        QVector<QSharedPointer<CQuadtreeNode>> m_selection;
+        QVector<QSharedPointer<CSelectionNode>> m_selection;
         int m_size;
-        bool m_small_visible_distance;
+//        bool m_small_visible_distance;
     public:
         CSelection();
         /*!
@@ -63,7 +87,7 @@ namespace CDLOD {
          * \brief      Set the small_visible_distance flag
          * \param[in]  value the flag value
          */
-        void set_small_visible_distance(bool value);
+//        void set_small_visible_distance(bool value);
         /*!
          * \brief      Returns distance at which morph begins
          * \param[in]  level current LOD level
