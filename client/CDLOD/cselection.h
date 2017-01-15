@@ -28,13 +28,14 @@ namespace CDLOD {
             unsigned int m_x;               ///< x-coordinate of the top left corner
             unsigned int m_y;               ///< y-coordinate of the top left corner
             unsigned int m_lod;             ///< Level of detail for this node
+            size_t m_size;                  ///< Size of the node's bounding square on the height map
             bool m_top_left;                ///< True if top left child in the corresponding CQuadtreeNode exists
             bool m_top_right;               ///< True if top right child in the corresponding CQuadtreeNode exists
             bool m_bottom_left;             ///< True if bottom left child in the corresponding CQuadtreeNode exists
             bool m_bottom_right;            ///< True if bottom right child in the corresponding CQuadtreeNode exists
         public:
             CSelectionNode() {}
-            CSelectionNode(unsigned int x, unsigned int y, unsigned int lod, bool top_left, bool top_right,
+            CSelectionNode(unsigned int x, unsigned int y, unsigned int lod, size_t size, bool top_left, bool top_right,
                            bool bottom_left, bool bottom_right);
             Math::CBoundingBox bounding_box(int xsize, int ysize) const;
         };
