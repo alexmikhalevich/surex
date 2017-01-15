@@ -11,7 +11,8 @@ namespace CDLOD {
     enum ESelectionResult {
         OUT_OF_FRUSTUM,
         OUT_OF_RANGE,
-        SELECTED
+        SELECTED,
+        UNDEFINED
     };
 
     /*!
