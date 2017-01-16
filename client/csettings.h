@@ -9,11 +9,12 @@
  */
 class CSettings {
 private:
-    int m_samples_num;                                  ///<
+    int m_samples_num;                                  ///< Number of samples per pixel when multisampling is enabled
     int m_max_selection_size;                           ///< Maximum selection pool size
     short m_max_lod_level;                              ///< Maximum LOD value
     qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     QVector<qreal> m_visibility_ranges;                 ///<
+    QString m_height_map_path;                          ///< Height map location
 public:
     CSettings();
     int samples_num() const;
@@ -21,6 +22,7 @@ public:
     short max_lod_level() const;
     qreal visibility_range(short level) const;
     qreal lod_level_distance_ratio() const;
+    QString height_map() const;
 };
 
 #endif // CSETTINGS_H

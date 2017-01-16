@@ -23,3 +23,7 @@ int CSettings::max_selection_size() const {
 qreal CSettings::lod_level_distance_ratio() const {
     return m_lod_level_distance_ratio;
 }
+
+QString CSettings::height_map() const {
+    return m_height_map_path;
+}
