@@ -1,5 +1,5 @@
-#ifndef CTERRAIN_H
-#define CTERRAIN_H
+#ifndef CTERRAIN_CDLOD_H
+#define CTERRAIN_CDLOD_H
 
 #include <qt5/QtGui/QOpenGLTexture>
 #include "cquadtree.h"
@@ -32,4 +32,4 @@ namespace CDLOD {
     };
 }
 
-#endif // CTERRAIN_H
+#endif // CTERRAIN_CDLOD_H
