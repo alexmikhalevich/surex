@@ -10,12 +10,13 @@
 #include <qt5/QtGui/QOpenGLVertexArrayObject>
 #include <qt5/QtGui/QOpenGLBuffer>
 #include <qt5/QtGui/QOpenGLFunctions>
+#include "irenderingobject.h"
 
 /*!
  * \brief The CMesh class
  * Mesh representation
  */
-class CMesh {
+class CMesh : public IRenderingObject {
 public:
     /*!
      * \brief The SVertexPosition struct
@@ -74,7 +75,7 @@ public:
     /*!
      * \brief     Render mesh
      */
-    void render();
+    virtual void render();
     /*!
      * \brief     Returns creation status
      * \return                      creation status: false if create() function failed
