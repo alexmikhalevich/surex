@@ -1,8 +1,12 @@
 #include "cmainwindow.h"
 
-CMainWindow::CMainWindow(QWindow* parent) : QWindow(parent), m_context(0), m_device(0), m_update_pending(false) {
-	setSurfaceType(QWindow::OpenGLSurface);
+CMainWindow::CMainWindow(QWindow* parent) : QWindow(parent), m_update_pending(false) {
+    setSurfaceType(QWindow::OpenGLSurface);
     m_settings.reset(new CSettings);
+    m_renderer = QSharedPointer<CRenderer>(new CRenderer(size(), this));
+    m_scene = QSharedPointer<CScene>(new CScene());
+
+    initialize();
 }
 
 CMainWindow::~CMainWindow() {
@@ -13,12 +17,8 @@ void CMainWindow::render(QPainter* painter) {
 }
 
 void CMainWindow::render() {
-	if(!m_device)
-		m_device = new QOpenGLPaintDevice;
-    glClearColor(0.0f, 0.0f, 255.0f, 10.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    m_device->setSize(size());
-    QPainter painter(m_device);
+    m_renderer->render_scene(m_scene);
+    QPainter painter(*m_renderer->device());
     render(&painter);
 }
 
@@ -38,20 +38,8 @@ void CMainWindow::renderLater() {
 void CMainWindow::renderNow() {
     if(!isExposed())
         return;
-    bool needs_init = false;
-    if(!m_context) {
-        m_context = new QOpenGLContext(this);
-        m_context->setFormat(requestedFormat());
-        m_context->create();
-        needs_init = true;
-    }
-    m_context->makeCurrent(this);
-    if(needs_init) {
-        initializeOpenGLFunctions();
-        initialize();
-    }
     render();
-    m_context->swapBuffers(this);
+    m_renderer->swap_buffers(this);
 }
 
 bool CMainWindow::event(QEvent* event) {
