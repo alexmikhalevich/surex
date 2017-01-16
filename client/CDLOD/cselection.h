@@ -47,7 +47,7 @@ namespace CDLOD {
         int m_size;
 //        bool m_small_visible_distance;
     public:
-        CSelection();
+        CSelection(QSharedPointer<CCamera>& camera, QSharedPointer<CSettings>& settings);
         /*!
          * \brief      Returns the visibility range for the given LOD level
          * \param[in]  level

@@ -2,7 +2,9 @@
 
 using namespace CDLOD;
 
-CSelection::CSelection() {
+CSelection::CSelection(QSharedPointer<CCamera>& camera, QSharedPointer<CSettings>& settings) {
+    m_camera = camera;
+    m_settings = settings;
 }
 
 const QVector3D& CSelection::observer_position() const {
