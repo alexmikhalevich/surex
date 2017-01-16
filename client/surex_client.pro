@@ -14,7 +14,9 @@ SOURCES += main.cpp \
     CDLOD/cselection.cpp \
     utility.cpp \
     CDLOD/cterrain.cpp \
-    cmesh.cpp
+    cmesh.cpp \
+    crenderer.cpp \
+    cscene.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -27,4 +29,7 @@ HEADERS += cmainwindow.h \
     CDLOD/cselection.h \
     utility.h \
     CDLOD/cterrain.h \
-    cmesh.h
+    cmesh.h \
+    irenderingobject.h \
+    crenderer.h \
+    cscene.h
