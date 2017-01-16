@@ -14,7 +14,7 @@ namespace CDLOD {
      */
     class CQuadtree {
     private:
-        QScopedPointer<CQuadtreeNode> m_root;       ///< Pointer to the root node in the tree
+        //QScopedPointer<CQuadtreeNode> m_root;       ///< Pointer to the root node in the tree
         QVector<qreal> m_lod_vis_distance_ratios;   ///< LOD visibility range distribution
         QSharedPointer<CSelection> m_selection;     ///< CSelection instance which contains all information needed to render the terrain
         /*!
