@@ -1,6 +1,5 @@
 #include "cterrain.h"
 
-CTerrain::CTerrain()
-{
+CTerrain::CTerrain() {
 
 }
