@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     CDLOD/cterrain.cpp \
     cmesh.cpp \
     crenderer.cpp \
-    cscene.cpp
+    cscene.cpp \
+    cterrain.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -32,4 +33,5 @@ HEADERS += cmainwindow.h \
     cmesh.h \
     irenderingobject.h \
     crenderer.h \
-    cscene.h
+    cscene.h \
+    cterrain.h
