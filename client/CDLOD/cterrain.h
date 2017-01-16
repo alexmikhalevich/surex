@@ -14,12 +14,21 @@ namespace CDLOD {
      */
     class CTerrain {
     private:
-        CQuadtree m_quadtree;                               ///< CQuadtree instance for processing
-        CSelection m_selection;                             ///< CSelection instance which represents the current area selected for rendering
-        CSettings m_settings;                               ///< CSettings instance which holds all system parameters
-        QScopedPointer<QOpenGLTexture> m_height_map;        ///< Pointer to the given height map
+        QScopedPointer<CQuadtree> m_quadtree;               ///< Pointer to the CQuadtree instance for processing
+        QSharedPointer<CSelection> m_selection;             ///< Pointer to the CSelection instance which represents the current area selected for rendering
+        QSharedPointer<CSettings> m_settings;               ///< Pointer to the CSettings instance which holds all system parameters
+        QSharedPointer<QOpenGLTexture> m_height_map;        ///< Pointer to the given height map
     public:
-        CTerrain();
+        CTerrain(QSharedPointer<CCamera>& camera, QSharedPointer<QOpenGLTexture>& height_map, QSharedPointer<CSettings>& settings);
+        /*!
+         * \brief       Launches LOD selection process
+         */
+        void select_lod();
+        /*!
+         * \brief       Returns pointer to the calculated selection
+         * \return      Pointer to the selection
+         */
+        QSharedPointer<CSelection> get_selection();
     };
 }
 
