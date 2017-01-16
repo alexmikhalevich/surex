@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     CDLOD/cquadtreenode.cpp \
     CDLOD/cselection.cpp \
     utility.cpp \
-    CDLOD/cterrain.cpp
+    CDLOD/cterrain.cpp \
+    cmesh.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -25,4 +26,5 @@ HEADERS += cmainwindow.h \
     CDLOD/cquadtreenode.h \
     CDLOD/cselection.h \
     utility.h \
-    CDLOD/cterrain.h
+    CDLOD/cterrain.h \
+    cmesh.h
