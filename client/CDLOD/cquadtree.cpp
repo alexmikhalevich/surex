@@ -6,7 +6,7 @@ void CQuadtree::_clean() {
 
 }
 
-void CQuadtree::init(QScopedPointer<CSettings>& settings_ptr) {
+void CQuadtree::init(QSharedPointer<CSettings>& settings_ptr) {
     _clean();
 
     qreal detail_balance = 1.0;
@@ -17,6 +17,6 @@ void CQuadtree::init(QScopedPointer<CSettings>& settings_ptr) {
     }
 }
 
-void CQuadtree::select(CSelection& selection) {
+void CQuadtree::select() {
 
 }

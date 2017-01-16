@@ -16,22 +16,22 @@ namespace CDLOD {
     private:
         QScopedPointer<CQuadtreeNode> m_root;       ///< Pointer to the root node in the tree
         QVector<qreal> m_lod_vis_distance_ratios;   ///< LOD visibility range distribution
+        QSharedPointer<CSelection> m_selection;     ///< CSelection instance which contains all information needed to render the terrain
         /*!
          * \brief Cleans all CQuadtree stuff
          */
         void _clean();
     public:
-        CQuadtree() {}
+        CQuadtree(QSharedPointer<CSelection>& selection) : m_selection(selection) {}
         /*!
          * \brief           Initialises the tree
          * \param[in]       settings_ptr        different system settings
          */
-        void init(QScopedPointer<CSettings>& settings_ptr);
+        void init(QSharedPointer<CSettings>& settings_ptr);
         /*!
          * \brief           Launches a recursive tree traversal
-         * \param[out]      selection           CSelection instance which contains all information needed to render the terrain
          */
-        void select(CSelection& selection);
+        void select();
     };
 }
 
