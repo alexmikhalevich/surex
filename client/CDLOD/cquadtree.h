@@ -16,6 +16,10 @@ namespace CDLOD {
     private:
         QScopedPointer<CQuadtreeNode> m_root;       ///< Pointer to the root node in the tree
         QVector<qreal> m_lod_vis_distance_ratios;   ///< LOD visibility range distribution
+        /*!
+         * \brief Cleans all CQuadtree stuff
+         */
+        void _clean();
     public:
         CQuadtree() {}
         /*!
