@@ -14,7 +14,6 @@ private:
     short m_max_lod_level;                              ///< Maximum LOD value
     qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     QVector<qreal> m_visibility_ranges;                 ///<
-    QString m_height_map_path;                          ///< Height map location
 public:
     CSettings();
     int samples_num() const;
@@ -22,7 +21,6 @@ public:
     short max_lod_level() const;
     qreal visibility_range(short level) const;
     qreal lod_level_distance_ratio() const;
-    QString height_map() const;
 };
 
 #endif // CSETTINGS_H

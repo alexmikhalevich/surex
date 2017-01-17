@@ -2,7 +2,7 @@
 
 using namespace CDLOD;
 
-CTerrain::CTerrain(QSharedPointer<CCamera>& camera, QSharedPointer<QOpenGLTexture>& height_map, QSharedPointer<CSettings>& settings) {
+CTerrain::CTerrain(QSharedPointer<CCamera>& camera, QSharedPointer<CSettings>& settings) {
     m_selection = QSharedPointer<CSelection>(new CSelection(camera, settings));
     //m_settings = settings;
 

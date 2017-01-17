@@ -19,7 +19,7 @@ namespace CDLOD {
         QSharedPointer<CSettings> m_settings;               ///< Pointer to the CSettings instance which holds all system parameters
         QSharedPointer<QOpenGLTexture> m_height_map;        ///< Pointer to the given height map
     public:
-        CTerrain(QSharedPointer<CCamera>& camera, QSharedPointer<QOpenGLTexture>& height_map, QSharedPointer<CSettings>& settings);
+        CTerrain(QSharedPointer<CCamera>& camera, const CHeightMap& height_map, QSharedPointer<CSettings>& settings);
         /*!
          * \brief       Launches LOD selection process
          */

@@ -10,6 +10,7 @@
 #include "irenderingobject.h"
 #include "csettings.h"
 #include "ccamera.h"
+#include "cplanetheightmap.h"
 
 /*!
  * \brief The CTerrain class
@@ -22,9 +23,10 @@ private:
     QScopedPointer<CMesh> m_terrain_mesh;                       ///< Terrain mesh
     QSharedPointer<CSettings> m_settings;                       ///< CSettings instance which holds all system parameters
     QSharedPointer<CCamera> m_camera;                           ///< Camera object, necessary for the CDLOD algorithm
-    QSharedPointer<QOpenGLTexture> m_height_map;                ///< Height map for generating our landscape
+    QSharedPointer<CPlanetHeightmap> m_height_map;              ///< Height map for generating our landscape
 public:
-    CTerrain(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr);
+    CTerrain(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr,
+             const QSharedPointer<CPlanetHeightmap>& heightmap);
     /*!
      * \brief Render terrain
      */
