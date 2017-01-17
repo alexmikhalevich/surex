@@ -27,3 +27,7 @@ qreal CSettings::lod_level_distance_ratio() const {
 QString CSettings::height_map() const {
     return m_height_map_path;
 }
+
+QSize CSettings::details() const {
+    return m_details;
+}
