@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     crenderer.cpp \
     cscene.cpp \
     cplanetheightmap.cpp \
-    cplanet.cpp
+    cplanet.cpp \
+    csimplexnoise.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -37,4 +38,5 @@ HEADERS += cmainwindow.h \
     cscene.h \
     cplanetheightmap.h \
     cplanet.h \
-    iserializable.h
+    iserializable.h \
+    csimplexnoise.h
