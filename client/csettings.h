@@ -16,6 +16,9 @@ private:
     qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     QVector<qreal> m_visibility_ranges;                 ///<
     QSize m_details;                                    ///< The amount of vertices per one unit cube's edge (along x-axis and y-axis)
+    qreal m_noise_scale;                                ///<
+    qreal m_noise_persistence;                          ///<
+    qreal m_noise_octaves;                              ///<
 public:
     CSettings();
     int samples_num() const;
@@ -24,6 +27,9 @@ public:
     qreal visibility_range(short level) const;
     qreal lod_level_distance_ratio() const;
     QSize details() const;
+    qreal noise_scale() const;
+    qreal noise_persistence() const;
+    qreal noise_octaves() const;
 };
 
 #endif // CSETTINGS_H

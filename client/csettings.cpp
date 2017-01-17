@@ -31,3 +31,15 @@ QString CSettings::height_map() const {
 QSize CSettings::details() const {
     return m_details;
 }
+
+float CSettings::noise_octaves() const {
+    return m_noise_octaves;
+}
+
+float CSettings::noise_persistence() const {
+    return m_noise_persistence;
+}
+
+float CSettings::noise_scale() const {
+    return m_noise_scale;
+}
