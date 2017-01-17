@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     cmesh.cpp \
     crenderer.cpp \
     cscene.cpp \
-    cterrain.cpp
+    cplanetheightmap.cpp \
+    cplanet.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -34,4 +35,6 @@ HEADERS += cmainwindow.h \
     irenderingobject.h \
     crenderer.h \
     cscene.h \
-    cterrain.h
+    cplanetheightmap.h \
+    cplanet.h \
+    iserializable.h
