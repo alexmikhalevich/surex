@@ -23,26 +23,34 @@ public:
      * Mesh vertex position
      */
     struct SVertexPosition {
-        float x;
-        float y;
-        float z;
+        float _x;
+        float _y;
+        float _z;
+        SVertexPosition() {}
+        SVertexPosition(float x, float y, float z) : _x(x), _y(y), _z(z) {}
+        SVertexPosition(const QVector3D& pos) : _x(pos.x()), _y(pos.y()), _z(pos.z()) {}
     };
     /*!
      * \brief The SVertexNormal struct
      * Mesh vertex normal
      */
     struct SVertexNormal {
-        float x;
-        float y;
-        float z;
+        float _x;
+        float _y;
+        float _z;
+        SVertexNormal() {}
+        SVertexNormal(float x, float y, float z) : _x(x), _y(y), _z(z)  {}
+        SVertexNormal(const QVector3D& pos) : _x(pos.x()), _y(pos.y()), _z(pos.z()) {}
     };
     /*!
      * \brief The SVertexTextureCoords struct
      * Mesh vertex texture coordinates
      */
     struct SVertexTextureCoords {
-        float x;
-        float y;
+        float _x;
+        float _y;
+        SVertexTextureCoords() {}
+        SVertexTextureCoords(float x, float y) : _x(x), _y(y) {}
     };
 
 private:
