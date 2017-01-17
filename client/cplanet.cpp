@@ -1,13 +1,30 @@
 #include "cplanet.h"
 
-CPlanet::CTerrain(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr,
-                   const QSharedPointer<CPlanetHeightmap>& heightmap) {
+CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr) {
+    _init(camera_ptr, settings_ptr);
+    m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(_filename()));
+    m_seed = m_heightmap.seed();
+}
+
+CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr, int seed) {
+    _init(camera_ptr, settings_ptr);
+    m_seed = seed;
+    m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(m_seed));
+}
+
+void CPlanet::_init(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr) {
     m_camera = camera_ptr;
     m_settings = settings_ptr;
 
-    QImage height_map_img(settings_ptr->height_map());
-    m_height_map = QSharedPointer<QOpenGLTexture>(new QOpenGLTexture(height_map_img));
-    m_cdlod_terrain.reset(new CDLOD::CTerrain(camera_ptr, m_height_map, settings_ptr));
+    m_vertices_position.resize(CUBE_FACES);
+    m_vertices_normal.resize(CUBE_FACES);
+    m_vert_tex_coords.resize(CUBE_FACES);
+
+    m_cdlod_terrain.reset(new CDLOD::CTerrain(camera_ptr, m_heightmap, settings_ptr));
+}
+
+QString CPlanet::_filename() const {
+    //TODO
 }
 
 void CPlanet::_map_cube_to_sphere(QVector3D& point) const {
@@ -23,16 +40,19 @@ void CPlanet::_map_cube_to_sphere(QVector3D& point) const {
 
 void CPlanet::_create_sphere_faces() {
     QVector3D min_position(-1.0f, -1.0, -1.0);
-    for(int x = 0; x < m_settings->details().width(); ++x) {
-        for(int y = 0; y < m_settings->details().height(); ++y) {
-            QVector3D position = min_position;
-            position.setX((qreal)x / (qreal)(m_settings->details().width() - 1) * 2.0);
-            position.setY((qreal)y / (qreal)(m_settings->details().height() - 1) * 2.0);
-            _map_cube_to_sphere(position);
-            QVector3D normal = position.normalized();
-            position *= m_radius;
-            m_vertices_position.append(CMesh::SVertexPosition(position));
-            m_vertices_normal.append(CMesh::SVertexNormal(normal));
+    for(int i = 0; i < CUBE_FACES; ++i) {
+        for(int x = 0; x < m_settings->details().width(); ++x) {
+            for(int y = 0; y < m_settings->details().height(); ++y) {
+                QVector3D position = min_position;
+                position.setX((qreal)x / (qreal)(m_settings->details().width() - 1) * 2.0);
+                position.setY((qreal)y / (qreal)(m_settings->details().height() - 1) * 2.0);
+                _map_cube_to_sphere(position);
+                QVector3D normal = position.normalized();
+                position *= m_radius;
+                position += normal * m_heightmap->height(position);
+                m_vertices_position[i].append(CMesh::SVertexPosition(position));
+                m_vertices_normal[i].append(CMesh::SVertexNormal(normal));
+            }
         }
     }
 }
@@ -40,5 +60,9 @@ void CPlanet::_create_sphere_faces() {
 void CPlanet::render() {
     m_cdlod_terrain->select_lod();
     QSharedPointer<CDLOD::CSelection> cur_selection = m_cdlod_terrain->get_selection();
+    //TODO
+}
+
+void CPlanet::serialize(const QString& filename) {
     //TODO
 }

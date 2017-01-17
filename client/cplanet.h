@@ -12,23 +12,31 @@
 #include "ccamera.h"
 #include "cplanetheightmap.h"
 
+#define CUBE_FACES 6
+
 /*!
  * \brief The CPlanet class
  * Planet representation for rendering
  */
-class CPlanet : public IRenderingObject
+class CPlanet : public IRenderingObject, public ISerializable
 {
 private:
-    QScopedPointer<CDLOD::CTerrain> m_cdlod_terrain;            ///< CDLOD algorithm
-    QScopedPointer<CMesh> m_terrain_mesh;                       ///< Terrain mesh
-    QSharedPointer<CSettings> m_settings;                       ///< CSettings instance which holds all system parameters
-    QSharedPointer<CCamera> m_camera;                           ///< Camera object, necessary for the CDLOD algorithm
-    QSharedPointer<CPlanetHeightmap> m_height_map;              ///< Height map for generating our landscape
-    QVector<CMesh::SVertexPosition> m_vertices_position;        ///< Vertex buffer for rendering
-    QVector<CMesh::SVertexNormal> m_vertices_normal;            ///< Normal buffer for rendering
-    QVector<CMesh::SVertexTextureCoords> m_vert_tex_coords;     ///< Texture coordinates buffer for rendering
-    qreal m_radius;                                             ///< Planet radius
+    QScopedPointer<CDLOD::CTerrain> m_cdlod_terrain;                  ///< CDLOD algorithm
+    QScopedPointer<CMesh> m_terrain_mesh;                             ///< Terrain mesh
+    QSharedPointer<CSettings> m_settings;                             ///< CSettings instance which holds all system parameters
+    QSharedPointer<CCamera> m_camera;                                 ///< Camera object, necessary for the CDLOD algorithm
+    QSharedPointer<CPlanetHeightmap> m_heightmap;                     ///< Height map for generating our landscape
+    QVector<QVector<CMesh::SVertexPosition>> m_vertices_position;     ///< Vertex buffer for rendering
+    QVector<QVector<CMesh::SVertexNormal>> m_vertices_normal;         ///< Normal buffer for rendering
+    QVector<QVector<CMesh::SVertexTextureCoords>> m_vert_tex_coords;  ///< Texture coordinates buffer for rendering
+    qreal m_radius;                                                   ///< Planet radius
+    int m_seed;                                                       ///< Planet seed, necessary for simplex noise generation algorithm
 
+    /*!
+     * \brief Saves all current heightmap data
+     * \param           filename            file which will contain the heilghtmap
+     */
+    virtual void serialize(const QString& filename);
     /*!
      * \brief Maps point on the unit cube to the sphere
      * \param           point                  mapped point
@@ -38,9 +46,20 @@ private:
      * \brief Maps unit cube's face to the part of the sphere
      */
     void _create_sphere_faces();
+    /*!
+     * \brief Does all necessary stuff for initialisation, common for both constuctors
+     * \param           camera_ptr              camera object
+     * \param           settings_ptr            all system settings
+     */
+    void _init(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr);
+    /*!
+     * \brief Obtains the heightmap filename
+     * \return          filename
+     */
+    QString _filename() const;
 public:
-    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr,
-             const QSharedPointer<CPlanetHeightmap>& heightmap);
+    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr);
+    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr, int seed);
     /*!
      * \brief Render planet
      */
