@@ -17,14 +17,13 @@
  */
 class CPlanetHeightmap : public ISerializable {
 private:
-    qreal m_noise_persistence;              ///<
-    qreal m_noise_scale;                    ///<
-    qreal m_noise_octaves;                  ///<
-    qreal m_height_min;                     ///<
-    qreal m_height_max;                     ///<
+    qreal m_noise_persistence;              ///< Simplex noise persistence (in [0; 1] range)
+    qreal m_noise_scale;                    ///< Simplex noise scale
+    qreal m_noise_octaves;                  ///< The number of simplex noise octaves
+    qreal m_height_min;                     ///< Minimum terrain height
+    qreal m_height_max;                     ///< Maximum terrain height
     QImage m_heightmap;                     ///< Holds heightmap image
     int m_seed;                             ///< Seed, necessary for simplex noise generation algorithm
-    CSimplexNoise m_noise;                  ///< Simplex noise object for generating random landscape
 
     /*!
      * \brief Maps the heightmap color to the height value

@@ -8,6 +8,8 @@ CPlanetHeightmap::CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& se
     m_noise_scale = m_settings->noise_scale();
     m_height_min = height_min;
     m_height_max = height_max;
+
+    CSimplexNoise::init(m_seed);
 }
 
 CPlanetHeightmap::CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings,
@@ -41,7 +43,7 @@ qreal CPlanetHeightmap::height(qreal polar_angle, qreal azimut_angle) const {
 
 qreal CPlanetHeightmap::height(const QVector3D& position) const {
     if(m_heightmap.isNull()) {
-        return m_noise.scaled_octave_noise_3d(m_noise_octaves, m_noise_persistence, m_noise_scale,
+        return CSimplexNoise::scaled_octave_noise_3d(m_noise_octaves, m_noise_persistence, m_noise_scale,
                                        m_height_min, m_height_max, position.x(), position.y(), position.z());
     }
     else {
