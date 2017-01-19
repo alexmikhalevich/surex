@@ -32,14 +32,22 @@ QSize CSettings::details() const {
     return m_details;
 }
 
-float CSettings::noise_octaves() const {
+int CSettings::noise_octaves() const {
     return m_noise_octaves;
 }
 
-float CSettings::noise_persistence() const {
+double CSettings::noise_persistence() const {
     return m_noise_persistence;
 }
 
-float CSettings::noise_scale() const {
+double CSettings::noise_scale() const {
     return m_noise_scale;
+}
+
+double CSettings::max_height() const {
+    return m_max_height;
+}
+
+double CSettings::min_height() const {
+    return m_min_height;
 }

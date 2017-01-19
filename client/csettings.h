@@ -16,9 +16,11 @@ private:
     qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     QVector<qreal> m_visibility_ranges;                 ///<
     QSize m_details;                                    ///< The amount of vertices per one unit cube's edge (along x-axis and y-axis)
-    qreal m_noise_scale;                                ///<
-    qreal m_noise_persistence;                          ///<
-    qreal m_noise_octaves;                              ///<
+    qreal m_noise_scale;                                ///< Simplex noise scale
+    qreal m_noise_persistence;                          ///< Simplex noise persistence
+    int m_noise_octaves;                                ///< Simplex noise octaves
+    double m_max_height;                                ///< Max terrain height
+    double m_min_height;                                ///< Min terrain height
 public:
     CSettings();
     int samples_num() const;
@@ -27,9 +29,11 @@ public:
     qreal visibility_range(short level) const;
     qreal lod_level_distance_ratio() const;
     QSize details() const;
-    qreal noise_scale() const;
-    qreal noise_persistence() const;
-    qreal noise_octaves() const;
+    double noise_scale() const;
+    double noise_persistence() const;
+    int noise_octaves() const;
+    double max_height() const;
+    double min_height() const;
 };
 
 #endif // CSETTINGS_H
