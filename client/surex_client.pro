@@ -34,3 +34,7 @@ HEADERS += cmainwindow.h \
     cplanet.h \
     iserializable.h \
     csimplexnoise.h
+
+DISTFILES += \
+    shaders/planet.frag \
+    shaders/planet.vert
