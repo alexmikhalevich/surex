@@ -1,25 +1,23 @@
 #include "cplanetheightmap.h"
 
-CPlanetHeightmap::CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings,
-                                   qreal height_min, qreal height_max) {
+CPlanetHeightmap::CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings) {
     m_seed = seed;
     m_noise_octaves = settings->noise_octaves();
     m_noise_persistence = settings->noise_persistence();
     m_noise_scale = m_settings->noise_scale();
-    m_height_min = height_min;
-    m_height_max = height_max;
+    m_height_min = settings->min_height();
+    m_height_max = settings->max_height();
 
     CSimplexNoise::init(m_seed);
 }
 
-CPlanetHeightmap::CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings,
-                                   qreal height_min, qreal height_max) {
+CPlanetHeightmap::CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings) {
     m_heightmap = QImage(path);
     m_noise_octaves = settings->noise_octaves();
     m_noise_persistence = settings->noise_persistence();
     m_noise_scale = m_settings->noise_scale();
-    m_height_min = height_min;
-    m_height_max = height_max;
+    m_height_min = settings->min_height();
+    m_height_max = settings->max_height();
 }
 
 void CPlanetHeightmap::generate(qreal planet_radius) {

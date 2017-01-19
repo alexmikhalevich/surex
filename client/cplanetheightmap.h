@@ -32,8 +32,8 @@ private:
      */
     qreal _color_to_height(const QColor& color) const;
 public:
-    CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings, qreal height_min, qreal height_max);
-    CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings, qreal height_min, qreal height_max);
+    CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings);
+    CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings);
     /*!
      * \brief Saves all current heightmap data
      * \param           filename            file which will contain the heilghtmap

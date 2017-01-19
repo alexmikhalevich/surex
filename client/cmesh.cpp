@@ -1,8 +1,6 @@
 #include "cmesh.h"
 
-CMesh::CMesh(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexNormal>& vertices_normal,
-             const QVector<SVertexTextureCoords>& vertices_tex_coords, const QVector<unsigned int>& indices,
-             const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader) {
+CMesh::CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader) {
 
     m_init_status = true;
     m_init_error = "";
@@ -17,45 +15,7 @@ CMesh::CMesh(const QVector<SVertexPosition>& vertices_position, const QVector<SV
     if(!m_init_status)
         return;
 
-    m_vbo_position = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-    m_vbo_position.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vbo_normal = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-    m_vbo_normal.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vbo_texture_coords = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-    m_vbo_texture_coords.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
-    m_ibo = QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
-    m_ibo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
-    if(!m_vao.create()) {
-        m_init_status = false;
-        m_init_error += "EE: Unable to create VAO.";
-    }
-    m_vao.bind();
-
-    if(!_init_buffer<SVertexPosition>(m_vbo_position, vertices_position, "vertex_position", 3, GL_FLOAT)) {
-        m_init_status = false;
-        m_init_error += "EE: Unable to create position VBO.";
-    }
-    if(!_init_buffer<SVertexNormal>(m_vbo_normal, vertices_normal, "vertex_normal", 3, GL_FLOAT)) {
-        m_init_status = false;
-        m_init_error += "EE: Unable to create normal VBO.";
-    }
-    if(!_init_buffer<SVertexTextureCoords>(m_vbo_texture_coords, vertices_tex_coords, "vertex_tex_coords", 2, GL_FLOAT)) {
-        m_init_status = false;
-        m_init_error += "EE: Unable to create texture VBO.";
-    }
-    if(m_ibo.create()) {
-        m_ibo.bind();
-        m_ibo.allocate(indices.constData(), indices.size() * sizeof(unsigned int));
-    }
-    else {
-        m_init_status = false;
-        m_init_error += "EE: Unable to create IBO.";
-    }
-    m_vao.release();
     m_textures = textures;
-    m_indices_size = indices.size();
 }
 
 template<class SVertexType>
@@ -66,6 +26,50 @@ bool CMesh::_init_buffer(const QOpenGLBuffer& buffer, const QVector<SVertexType>
     buffer.allocate(data.constData(), data.size() * sizeof(SVertexType));
     m_shader_program.enableAttributeArray(buffer_id);
     m_shader_program.setAttributeBuffer(buffer_id, gl_type, 0, tuple_size);
+    return true;
+}
+
+bool CMesh::init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexNormal>& vertices_normal,
+                 const QVector<SVertexTextureCoords>& vertices_tex_coords/*, const QVector<unsigned int>& indices*/) {
+    m_vbo_position = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    m_vbo_position.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vbo_normal = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    m_vbo_normal.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vbo_texture_coords = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    m_vbo_texture_coords.setUsagePattern(QOpenGLBuffer::StaticDraw);
+
+//    m_ibo = QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
+//    m_ibo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+
+    if(!m_vao.create()) {
+        m_init_error = "EE: Unable to create VAO.";
+        return false;
+    }
+    m_vao.bind();
+
+    if(!_init_buffer<SVertexPosition>(m_vbo_position, vertices_position, "vertex_position", 3, GL_FLOAT)) {
+        m_init_error = "EE: Unable to create position VBO.";
+        return false;
+    }
+    if(!_init_buffer<SVertexNormal>(m_vbo_normal, vertices_normal, "vertex_normal", 3, GL_FLOAT)) {
+        m_init_error = "EE: Unable to create normal VBO.";
+        return false;
+    }
+    if(!_init_buffer<SVertexTextureCoords>(m_vbo_texture_coords, vertices_tex_coords, "vertex_tex_coords", 2, GL_FLOAT)) {
+        m_init_error = "EE: Unable to create texture VBO.";
+        return false;
+    }
+//    if(m_ibo.create()) {
+//        m_ibo.bind();
+//        m_ibo.allocate(indices.constData(), indices.size() * sizeof(unsigned int));
+//    }
+//    else {
+//        m_init_error = "EE: Unable to create IBO.";
+//        return false;
+//    }
+    m_vao.release();
+    m_indices_size = indices.size();
+
     return true;
 }
 
