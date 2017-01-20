@@ -28,7 +28,7 @@ QString CSettings::height_map() const {
     return m_height_map_path;
 }
 
-QSize CSettings::details() const {
+int CSettings::details() const {
     return m_details;
 }
 
@@ -44,10 +44,10 @@ double CSettings::noise_scale() const {
     return m_noise_scale;
 }
 
-double CSettings::max_height() const {
+float CSettings::max_height() const {
     return m_max_height;
 }
 
-double CSettings::min_height() const {
+float CSettings::min_height() const {
     return m_min_height;
 }

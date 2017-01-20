@@ -10,13 +10,13 @@
 #include <qt5/QtGui/QOpenGLVertexArrayObject>
 #include <qt5/QtGui/QOpenGLBuffer>
 #include <qt5/QtGui/QOpenGLFunctions>
-#include "irenderingobject.h"
+#include "irenderable.h"
 
 /*!
  * \brief The CMesh class
  * Mesh representation
  */
-class CMesh : public IRenderingObject {
+class CMesh : public IRenderable {
 public:
     /*!
      * \brief The SVertexPosition struct
@@ -52,15 +52,15 @@ public:
         SVertexTextureCoords() {}
         SVertexTextureCoords(float x, float y) : _x(x), _y(y) {}
     };
-
-private:
-    QVector<QSharedPointer<QOpenGLTexture>> m_textures;             ///< Textures of the current mesh
+protected:
     QOpenGLBuffer m_vbo_position;                                   ///< Vertex buffer object for positions
-    QOpenGLBuffer m_vbo_normal;                                     ///< Vertex buffer object for normals
     QOpenGLBuffer m_vbo_texture_coords;                             ///< Vertex buffer object for texture coordinates
-    //QOpenGLBuffer m_ibo;                                            ///< Index buffer object
+    QVector<QSharedPointer<QOpenGLTexture>> m_textures;             ///< Textures of the current mesh
     QOpenGLVertexArrayObject m_vao;                                 ///< Vertex array object
     QOpenGLShaderProgram m_shader_program;                          ///< Shader program for the current mesh
+private:
+    //QOpenGLBuffer m_vbo_normal;                                     ///< Vertex buffer object for normals
+    //QOpenGLBuffer m_ibo;                                            ///< Index buffer object
     bool m_init_status;                                             ///< Shows if there were errors while mesh initialization
     QString m_init_error;                                           ///< Keeps error text if it occurs
     //GLsizei m_indices_size;                                         ///< Number of indices, used in mesh rendering
@@ -81,13 +81,12 @@ public:
     /*!
      * \brief   Inits all buffers
      * \param               vertices_position   vertex buffer
-     * \param               vertices_normal     normal buffer
      * \param               vertices_tex_coords texture coordinates buffer
      * \param               indices             index buffer
      * \return                                  operation status: false if any buffer creation operation fails
      */
-    bool init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexNormal>& vertices_normal,
-              const QVector<SVertexTextureCoords>& vertices_tex_coords/*, const QVector<unsigned int>& indices*/);
+    virtual bool init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexTextureCoords>& vertices_tex_coords
+              /*, const QVector<unsigned int>& indices*/);
     /*!
      * \brief     Render mesh
      */
@@ -102,6 +101,11 @@ public:
      * \return                      error description
      */
     QString error() const;
+    /*!
+     * \brief Returns reference to the shader program instance
+     * \return
+     */
+    QOpenGLShaderProgram& shader();
 };
 
 #endif // CMESH_H

@@ -18,13 +18,13 @@ void CMainWindow::render(QPainter* painter) {
 
 void CMainWindow::render() {
     m_renderer->render_scene(m_scene);
-    QPainter painter(*m_renderer->device());
+    QPainter painter(m_renderer->device());
     render(&painter);
 }
 
 void CMainWindow::initialize() {
     QSurfaceFormat surface_format;
-    surface_format.setSamples(m_settings->get_samples_num());
+    surface_format.setSamples(m_settings->samples_num());
     setFormat(surface_format);
 }
 

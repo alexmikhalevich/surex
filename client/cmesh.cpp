@@ -29,12 +29,12 @@ bool CMesh::_init_buffer(const QOpenGLBuffer& buffer, const QVector<SVertexType>
     return true;
 }
 
-bool CMesh::init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexNormal>& vertices_normal,
-                 const QVector<SVertexTextureCoords>& vertices_tex_coords/*, const QVector<unsigned int>& indices*/) {
+bool CMesh::init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexTextureCoords>& vertices_tex_coords
+                 /*, const QVector<unsigned int>& indices*/) {
     m_vbo_position = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     m_vbo_position.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vbo_normal = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-    m_vbo_normal.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//    m_vbo_normal = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+//    m_vbo_normal.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_vbo_texture_coords = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     m_vbo_texture_coords.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
@@ -47,14 +47,14 @@ bool CMesh::init(const QVector<SVertexPosition>& vertices_position, const QVecto
     }
     m_vao.bind();
 
-    if(!_init_buffer<SVertexPosition>(m_vbo_position, vertices_position, "vertex_position", 3, GL_FLOAT)) {
+    if(!_init_buffer<SVertexPosition>(m_vbo_position, vertices_position, "vertex", 3, GL_FLOAT)) {
         m_init_error = "EE: Unable to create position VBO.";
         return false;
     }
-    if(!_init_buffer<SVertexNormal>(m_vbo_normal, vertices_normal, "vertex_normal", 3, GL_FLOAT)) {
-        m_init_error = "EE: Unable to create normal VBO.";
-        return false;
-    }
+//    if(!_init_buffer<SVertexNormal>(m_vbo_normal, vertices_normal, "vertex_normal", 3, GL_FLOAT)) {
+//        m_init_error = "EE: Unable to create normal VBO.";
+//        return false;
+//    }
     if(!_init_buffer<SVertexTextureCoords>(m_vbo_texture_coords, vertices_tex_coords, "vertex_tex_coords", 2, GL_FLOAT)) {
         m_init_error = "EE: Unable to create texture VBO.";
         return false;
@@ -68,7 +68,7 @@ bool CMesh::init(const QVector<SVertexPosition>& vertices_position, const QVecto
 //        return false;
 //    }
     m_vao.release();
-    m_indices_size = indices.size();
+//    m_indices_size = indices.size();
 
     return true;
 }
@@ -92,4 +92,8 @@ void CMesh::render() {
     m_vao.bind();
     QOpenGLFunctions::glDrawElements(GL_TRIANGLES, m_indices_size, GL_UNSIGNED_INT, 0);
     m_vao.release();
+}
+
+QOpenGLShaderProgram& CMesh::shader() {
+    return m_shader_program;
 }

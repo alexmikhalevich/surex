@@ -15,12 +15,12 @@ private:
     static short m_max_lod_level;                              ///< Maximum LOD value
     static qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     static QVector<qreal> m_visibility_ranges;                 ///<
-    static QSize m_details;                                    ///< The amount of vertices per one unit cube's edge (along x-axis and y-axis)
+    static int m_details;                                      ///< The amount of vertices per one unit cube's edge
     static qreal m_noise_scale;                                ///< Simplex noise scale
     static qreal m_noise_persistence;                          ///< Simplex noise persistence
     static int m_noise_octaves;                                ///< Simplex noise octaves
-    static double m_max_height;                                ///< Max terrain height
-    static double m_min_height;                                ///< Min terrain height
+    static float m_max_height;                                 ///< Max terrain height
+    static float m_min_height;                                 ///< Min terrain height
 public:
     CSettings();
     static int samples_num() const;
@@ -28,12 +28,12 @@ public:
     static short max_lod_level() const;
     static qreal visibility_range(short level) const;
     static qreal lod_level_distance_ratio() const;
-    static QSize details() const;
+    static int details() const;
     static double noise_scale() const;
     static double noise_persistence() const;
     static int noise_octaves() const;
-    static double max_height() const;
-    static double min_height() const;
+    static float max_height() const;
+    static float min_height() const;
 };
 
 #endif // CSETTINGS_H
