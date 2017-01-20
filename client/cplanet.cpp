@@ -1,29 +1,28 @@
 #include "cplanet.h"
 
-CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr) {
-    _init(camera_ptr, settings_ptr);
+CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr) {
+    _init(camera_ptr);
     m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(_filename(), settings_ptr));
     m_seed = m_heightmap.seed();
     _post_init();
 }
 
-CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr, int seed) {
-    _init(camera_ptr, settings_ptr);
+CPlanet::CPlanet(const QSharedPointer<CCamera>& camera_ptr, int seed) {
+    _init(camera_ptr);
     m_seed = seed;
     m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(m_seed, settings_ptr));
     _post_init();
 }
 
-void CPlanet::_init(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr) {
+void CPlanet::_init(const QSharedPointer<CCamera>& camera_ptr) {
     m_camera = camera_ptr;
-    m_settings = settings_ptr;
 
-    int size = CUBE_FACES * m_settings->details().width() * m_settings->details().height();
+    int size = CUBE_FACES * CSettings::details().width() * CSettings::details().height();
     m_vertices_position.resize(size);
     m_vertices_normal.resize(size);
     m_vert_tex_coords.resize(size);
 
-    m_cdlod_terrain.reset(new CDLOD::CTerrain(camera_ptr, m_heightmap, settings_ptr));
+    m_cdlod_terrain.reset(new CDLOD::CTerrain(camera_ptr, m_heightmap));
     _load_textures();
     m_terrain_mesh.reset(new CMesh(m_textures, "shaders/planet.vert", "shaders/planet.frag"));
     if(!m_terrain_mesh->create_successfull()) {
@@ -56,17 +55,20 @@ void CPlanet::_map_cube_to_sphere(QVector3D& point) const {
 }
 
 void CPlanet::_create_sphere_faces() {
-    QVector3D min_position[6] = {
-        QVector(-1.0, -1.0, -1.0)
+    QVector3D min_position[2] = {
+        QVector3D(-1.0, -1.0, -1.0),
+        QVector3D(1.0, 1.0, 1.0)
     };
-    int width = m_settings->details().width();
-    int height = m_settings->details().height();
-    for(int i = 0; i < CUBE_FACES; ++i) {
+    int width = CSettings::details().width();
+    int height = CSettings::details().height();
+    for(int i = 0; i < 2; ++i) {
         for(int x = 0; x < width; ++x) {
             for(int y = 0; y < height; ++y) {
                 QVector3D position = min_position;
-                position.setX((qreal)x / (qreal)(m_settings->details().width() - 1) * 2.0);
-                position.setY((qreal)y / (qreal)(m_settings->details().height() - 1) * 2.0);
+                //creating cube
+                position.setX((qreal)x / (qreal)(CSettings::details().width() - 1) * 2.0);
+                position.setY((qreal)y / (qreal)(CSettings::details().height() - 1) * 2.0);
+                //converting cube to sphere
                 _map_cube_to_sphere(position);
                 QVector3D normal = position.normalized();
                 position *= m_radius;

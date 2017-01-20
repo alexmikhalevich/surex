@@ -10,30 +10,30 @@
  */
 class CSettings {
 private:
-    int m_samples_num;                                  ///< Number of samples per pixel when multisampling is enabled
-    int m_max_selection_size;                           ///< Maximum selection pool size
-    short m_max_lod_level;                              ///< Maximum LOD value
-    qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
-    QVector<qreal> m_visibility_ranges;                 ///<
-    QSize m_details;                                    ///< The amount of vertices per one unit cube's edge (along x-axis and y-axis)
-    qreal m_noise_scale;                                ///< Simplex noise scale
-    qreal m_noise_persistence;                          ///< Simplex noise persistence
-    int m_noise_octaves;                                ///< Simplex noise octaves
-    double m_max_height;                                ///< Max terrain height
-    double m_min_height;                                ///< Min terrain height
+    static int m_samples_num;                                  ///< Number of samples per pixel when multisampling is enabled
+    static int m_max_selection_size;                           ///< Maximum selection pool size
+    static short m_max_lod_level;                              ///< Maximum LOD value
+    static qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
+    static QVector<qreal> m_visibility_ranges;                 ///<
+    static QSize m_details;                                    ///< The amount of vertices per one unit cube's edge (along x-axis and y-axis)
+    static qreal m_noise_scale;                                ///< Simplex noise scale
+    static qreal m_noise_persistence;                          ///< Simplex noise persistence
+    static int m_noise_octaves;                                ///< Simplex noise octaves
+    static double m_max_height;                                ///< Max terrain height
+    static double m_min_height;                                ///< Min terrain height
 public:
     CSettings();
-    int samples_num() const;
-    int max_selection_size() const;
-    short max_lod_level() const;
-    qreal visibility_range(short level) const;
-    qreal lod_level_distance_ratio() const;
-    QSize details() const;
-    double noise_scale() const;
-    double noise_persistence() const;
-    int noise_octaves() const;
-    double max_height() const;
-    double min_height() const;
+    static int samples_num() const;
+    static int max_selection_size() const;
+    static short max_lod_level() const;
+    static qreal visibility_range(short level) const;
+    static qreal lod_level_distance_ratio() const;
+    static QSize details() const;
+    static double noise_scale() const;
+    static double noise_persistence() const;
+    static int noise_octaves() const;
+    static double max_height() const;
+    static double min_height() const;
 };
 
 #endif // CSETTINGS_H

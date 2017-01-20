@@ -23,7 +23,6 @@ class CPlanet : public IRenderingObject, public ISerializable
 private:
     QScopedPointer<CDLOD::CTerrain> m_cdlod_terrain;                  ///< CDLOD algorithm
     QScopedPointer<CMesh> m_terrain_mesh;                             ///< Terrain mesh
-    QSharedPointer<CSettings> m_settings;                             ///< CSettings instance which holds all system parameters
     QSharedPointer<CCamera> m_camera;                                 ///< Camera object, necessary for the CDLOD algorithm
     QSharedPointer<CPlanetHeightmap> m_heightmap;                     ///< Height map for generating our landscape
     QVector<CMesh::SVertexPosition> m_vertices_position;              ///< Vertex buffer for rendering
@@ -48,7 +47,7 @@ private:
      * \param           camera_ptr              camera object
      * \param           settings_ptr            all system settings
      */
-    void _init(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr);
+    void _init(const QSharedPointer<CCamera>& camera_ptr);
     /*!
      * \brief Post init stuff, common for both constructors
      */
@@ -63,8 +62,8 @@ private:
      */
     void _load_textures();
 public:
-    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr);
-    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QSharedPointer<CSettings>& settings_ptr, int seed);
+    CPlanet(const QSharedPointer<CCamera>& camera_ptr);
+    CPlanet(const QSharedPointer<CCamera>& camera_ptr, int seed);
     /*!
      * \brief Render planet
      */
