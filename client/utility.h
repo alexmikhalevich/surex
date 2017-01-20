@@ -20,7 +20,6 @@ namespace Math {
         QVector3D normal() const;
     };
 
-    //TODO: review all methods, bounding box representation changed
     class CBoundingBox {
     private:
         QVector3D m_vert_min;
