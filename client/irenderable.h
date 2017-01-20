@@ -2,10 +2,10 @@
 #define IRENDERINGOBJECT_H
 
 /*!
- * \brief The IRenderingObject class
- * Common interface for rendering objects
+ * \brief The IRenderable class
+ * Common interface for renderable objects
  */
-class IRenderingObject
+class IRenderable
 {
 public:
     /*!

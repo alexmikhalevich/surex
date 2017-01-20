@@ -4,7 +4,7 @@ CScene::CScene() {
 
 }
 
-void CScene::add_object(const QSharedPointer<IRenderingObject>& object) {
+void CScene::add_object(const QSharedPointer<IRenderable>& object) {
     m_objects.push_back(object);
 }
 

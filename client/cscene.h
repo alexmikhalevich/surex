@@ -3,7 +3,7 @@
 
 #include <qt5/QtCore/QVector>
 #include <qt5/QtCore/QSharedPointer>
-#include "irenderingobject.h"
+#include "irenderable.h"
 
 /*!
  * \brief The CScene class
@@ -12,14 +12,14 @@
 class CScene
 {
 private:
-    QVector<QSharedPointer<IRenderingObject>> m_objects;                       ///< Scene objects
+    QVector<QSharedPointer<IRenderable>> m_objects;                       ///< Scene objects
 public:
     CScene();
     /*!
      * \brief Add object to the scene
      * \param           object            object which will be added to the scene
      */
-    void add_object(const QSharedPointer<IRenderingObject>& object);
+    void add_object(const QSharedPointer<IRenderable>& object);
     /*!
      * \brief Render current scene
      */
