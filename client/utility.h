@@ -20,13 +20,14 @@ namespace Math {
         QVector3D normal() const;
     };
 
+    //TODO: review all methods, bounding box representation changed
     class CBoundingBox {
     private:
-        QVector3D m_center;
-        QVector3D m_half_size;
+        QVector3D m_vert_min;
+        QVector3D m_vert_max;
     public:
-        CBoundingBox() : m_center(QVector3D(0.0, 0.0, 0.0)), m_half_size(QVector3D(0.0, 0.0, 0.0)) {}
-        CBoundingBox(const QVector3D& center, const QVector3D& half_size) : m_center(center), m_half_size(half_size) {}
+        CBoundingBox() : m_vert_min(QVector3D(-1.0, -1.0, -1.0)), m_vert_max(QVector3D(1.0, 1.0, 1.0)) {}
+        CBoundingBox(const QVector3D& vert_min, const QVector3D& vert_max) : m_vert_min(vert_min), m_vert_max(vert_max) {}
         ~CBoundingBox() {}
         void get_min(QVector3D& result) const;
         void get_max(QVector3D& result) const;
@@ -34,8 +35,8 @@ namespace Math {
         qreal max_distance_squared(const QVector3D& point) const;
         void vertex_positive(const QVector3D& normal, QVector3D& result) const;
         void vertex_negative(const QVector3D& normal, QVector3D& result) const;
-        QVector3D center() const;
-        QVector3D half_size() const;
+        QVector3D vert_min() const;
+        QVector3D vert_max() const;
     };
 
     class CBoundingFrustum {

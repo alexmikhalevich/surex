@@ -3,60 +3,54 @@
 using namespace Math;
 
 void CBoundingBox::get_max(QVector3D& result) const {
-    result = m_center + m_half_size;
+    result = m_vert_max;
 }
 
 void CBoundingBox::get_min(QVector3D& result) const {
-    result = m_center - m_half_size;
+    result = m_vert_min;
 }
 
 qreal CBoundingBox::max_distance_squared(const QVector3D& point) const {
     qreal distance = 0.0;
     qreal coeff = 0.0;
-    QVector3D min_vector, max_vector;
-    get_max(max_vector);
-    get_min(min_vector);
 
-    coeff = qMax(qAbs(point.x() - max_vector.x()), qAbs(point.x() - min_vector.x()));
+    coeff = qMax(qAbs(point.x() - m_vert_max.x()), qAbs(point.x() - m_vert_min.x()));
     distance += coeff * coeff;
-    coeff = qMax(qAbs(point.y() - max_vector.y()), qAbs(point.y() - min_vector.y()));
+    coeff = qMax(qAbs(point.y() - m_vert_max.y()), qAbs(point.y() - m_vert_min.y()));
     distance += coeff * coeff;
-    coeff = qMax(qAbs(point.z() - max_vector.z()), qAbs(point.z() - min_vector.z()));
+    coeff = qMax(qAbs(point.z() - m_vert_max.z()), qAbs(point.z() - m_vert_min.z()));
     distance += coeff * coeff;
 
     return distance;
 }
 
 qreal CBoundingBox::min_distance_squared(const QVector3D& point) const {
-    QVector3D min_vector, max_vector;
-    get_max(max_vector);
-    get_min(min_vector);
     qreal distance = 0.0;
 
-    if(point.x() < min_vector.x()) {
-        qreal d = point.x() = min_vector.x();
+    if(point.x() < m_vert_min.x()) {
+        qreal d = point.x() = m_vert_min.x();
         distance += d * d;
     }
-    else if(point.x() > max_vector.x()) {
-        qreal d = point.x() = max_vector.x();
-        distance += d * d;
-    }
-
-    if(point.y() < min_vector.y()) {
-        qreal d = point.y() = min_vector.y();
-        distance += d * d;
-    }
-    else if(point.y() > max_vector.y()) {
-        qreal d = point.y() = max_vector.y();
+    else if(point.x() > m_vert_max.x()) {
+        qreal d = point.x() = m_vert_max.x();
         distance += d * d;
     }
 
-    if(point.z() < min_vector.z()) {
-        qreal d = point.z() = min_vector.z();
+    if(point.y() < m_vert_min.y()) {
+        qreal d = point.y() = m_vert_min.y();
         distance += d * d;
     }
-    else if(point.z() > max_vector.z()) {
-        qreal d = point.z() = max_vector.z();
+    else if(point.y() > m_vert_max.y()) {
+        qreal d = point.y() = m_vert_max.y();
+        distance += d * d;
+    }
+
+    if(point.z() < m_vert_min.z()) {
+        qreal d = point.z() = m_vert_min.z();
+        distance += d * d;
+    }
+    else if(point.z() > m_vert_max.z()) {
+        qreal d = point.z() = m_vert_max.z();
         distance += d * d;
     }
 
@@ -64,35 +58,23 @@ qreal CBoundingBox::min_distance_squared(const QVector3D& point) const {
 }
 
 void CBoundingBox::vertex_positive(const QVector3D& normal, QVector3D& result) const {
-    QVector3D max_vector;
-    get_min(result);
-    get_max(max_vector);
+    result = m_vert_min;
     if(normal.x() >= 0)
-        result.setX(max_vector.x());
+        result.setX(m_vert_max.x());
     if(normal.y() >= 0)
-        result.setY((max_vector.y());
+        result.setY((m_vert_max.y());
     if(normal.z() >= 0)
-        result.setZ(max_vector.z());
+        result.setZ(m_vert_max.z());
 }
 
 void CBoundingBox::vertex_negative(const QVector3D& normal, QVector3D& result) const {
-    QVector3D min_vector;
-    get_max(result);
-    get_min(max_vector);
+    result = m_vert_max;
     if(normal.x() >= 0)
-        result.setX(min_vector.x());
+        result.setX(m_vert_min.x());
     if(normal.y() >= 0)
-        result.setY(min_vector.y());
+        result.setY(m_vert_min.y());
     if(normal.z() >= 0)
-        result.setZ(min_vector.z());
-}
-
-QVector3D CBoundingBox::center() const {
-    return m_center;
-}
-
-QVector3D CBoundingBox::half_size() const {
-    return m_half_size;
+        result.setZ(m_vert_min.z());
 }
 
 void CPlane::set_normal(const QVector3D& normal) {
@@ -171,19 +153,19 @@ CPlane CBoundingFrustum::plane_at(int index) const {
 }
 
 CCollision::ECollisionType CCollision::contains(const CBoundingBox& box_1, const CBoundingBox& box_2) {
-    qreal bottom_1 = box_1.center().y() - box_1.half_size().y();
-    qreal top_1 = box_1.center().y() + box_1.half_size().y();
-    qreal left_1 = box_1.center().x() - box_1.half_size().x();
-    qreal right_1 = box_1.center().x() + box_1.half_size().x();
-    qreal near_1 = box_1.center().z() - box_1.half_size().z();
-    qreal far_1 = box_1.center().z() + box_1.half_size().z();
+    qreal bottom_1 = box_1.vert_min().y();
+    qreal top_1 = box_1.vert_max().y();
+    qreal left_1 = box_1.vert_min().x();
+    qreal right_1 = box_1.vert_max().x();
+    qreal near_1 = box_1.vert_min().z();
+    qreal far_1 = box_1.vert_max().z();
 
-    qreal bottom_2 = box_2.center().y() - box_2.half_size().y();
-    qreal top_2 = box_2.center().y() + box_2.half_size().y();
-    qreal left_2 = box_2.center().x() - box_2.half_size().x();
-    qreal right_2 = box_2.center().x() + box_2.half_size().x();
-    qreal near_2 = box_2.center().z() - box_2.half_size().z();
-    qreal far_2 = box_2.center().z() + box_2.half_size().z();
+    qreal bottom_2 = box_2.vert_min().y();
+    qreal top_2 = box_2.vert_max().y();
+    qreal left_2 = box_2.vert_min().x();
+    qreal right_2 = box_2.vert_max().x();
+    qreal near_2 = box_2.vert_min().z();
+    qreal far_2 = box_2.vert_max().z();
 
     if(top_1 > bottom_2 && bottom_1 < top_2 && left_1 < right_2 && right_1 > left_2 && far_1 > near_2 && near_1 < far_2) {
         if(top_1 >= top_2 && bottom_1 <= top_2 && left_1 <= left_2 && right_1 >= right_2 && near_1 <= near_2 && far_1 >= far_2) {
