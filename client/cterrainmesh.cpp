@@ -21,6 +21,7 @@ CTerrainMesh::CTerrainMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textur
     }
 
     m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(seed));
+    m_heightmap->generate(CSettings::details() * CSettings::details() * CUBE_FACES);
     m_sphere_radius = radius;
 }
 
@@ -104,6 +105,11 @@ QString CTerrainMesh::_filename() const {
 }
 
 void CTerrainMesh::_load_textures() {
+    QOpenGLTexture heightmap_texture(m_heightmap->heightmap(), QOpenGLTexture::DontGenerateMipMaps);
+    QOpenGLFunctions::glActiveTexture(heightmap_texture);
+    m_shader_program.setUniformValue("heightmap", m_textures.size() + HEIGHTMAP_TEXTURE_OFFSET);
+    heightmap_texture.bind();
+
     //TODO
 }
 
@@ -115,5 +121,7 @@ void CTerrainMesh::render() {
     m_cdlod_terrain->select_lod();
     for(int i = 0; i < CUBE_FACES; ++i) {
         QSharedPointer<CDLOD::CSelection> selection = m_cdlod_terrain->get_selection(i);
+        //TODO
     }
+    _load_textures();
 }

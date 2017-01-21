@@ -2,6 +2,7 @@
 #define CTERRAINMESH_H
 
 #define CUBE_FACES 6
+#define HEIGHTMAP_TEXTURE_OFFSET 1
 
 #include "cmesh.h"
 #include "cplanetheightmap.h"

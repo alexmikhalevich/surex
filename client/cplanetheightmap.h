@@ -30,7 +30,7 @@ private:
      * \param[in]       color
      * \return          height
      */
-    qreal _color_to_height(const QColor& color) const;
+//    qreal _color_to_height(const QColor& color) const;
 public:
     CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings);
     CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings);
@@ -41,9 +41,9 @@ public:
     virtual void serialize(const QString& filename);
     /*!
      * \brief Generate heightmap for the particular planet radius
-     * \param[in]       planet_radius
+     * \param[in]       size                heightmap size
      */
-    void generate(qreal planet_radius);
+    void generate(const QSize& size);
     /*!
      * \brief Returns heightmap size
      * \return          heightmap size
@@ -55,18 +55,23 @@ public:
      * \param[in]       azimut_angle
      * \return          height
      */
-    qreal height(qreal polar_angle, qreal azimut_angle) const;
+//    qreal height(qreal polar_angle, qreal azimut_angle) const;
     /*!
      * \brief Calculates height for the particular point on the sphere
      * \param[in]       position        cartesian coordinates of the processed point
      * \return
      */
-    qreal height(const QVector3D& position) const;
+//    qreal height(const QVector3D& position) const;
     /*!
      * \brief Returns seed which was used for simplex noise generation
      * \return          seed
      */
     int seed() const;
+    /*!
+     * \brief Returns reference to the heightmap
+     * \return          reference to the heightmap
+     */
+    QImage& heightmap();
 };
 
 #endif // CPLANETHEIGHTMAP_H
