@@ -8,9 +8,6 @@
 #include "csimplexnoise.h"
 #include "csettings.h"
 
-#define MAX_POLAR_ANGLE 180.0
-#define MAX_AZIMUT_ANGLE 360.0
-
 /*!
  * \brief The CPlanetHeightmap class
  * Heightmap representation
@@ -25,14 +22,8 @@ private:
     QImage m_heightmap;                     ///< Holds heightmap image
     int m_seed;                             ///< Seed, necessary for simplex noise generation algorithm
 
-    /*!
-     * \brief Maps the heightmap color to the height value
-     * \param[in]       color
-     * \return          height
-     */
-//    qreal _color_to_height(const QColor& color) const;
 public:
-    CPlanetHeightmap(int seed, const QSharedPointer<CSettings>& settings);
+    CPlanetHeightmap(int seed, int size);
     CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings);
     /*!
      * \brief Saves all current heightmap data
@@ -40,28 +31,16 @@ public:
      */
     virtual void serialize(const QString& filename);
     /*!
-     * \brief Generate heightmap for the particular planet radius
-     * \param[in]       size                heightmap size
+     * \brief Sets color of the particular pixel
+     * \param       x       x-coordinate of the pixel
+     * \param       y       y-coordinate of the pixel
      */
-    void generate(const QSize& size);
+    void set_pixel(int x, int y);
     /*!
      * \brief Returns heightmap size
      * \return          heightmap size
      */
     QSize size() const;
-    /*!
-     * \brief Calculates height for the particular point on the sphere
-     * \param[in]       polar_angle
-     * \param[in]       azimut_angle
-     * \return          height
-     */
-//    qreal height(qreal polar_angle, qreal azimut_angle) const;
-    /*!
-     * \brief Calculates height for the particular point on the sphere
-     * \param[in]       position        cartesian coordinates of the processed point
-     * \return
-     */
-//    qreal height(const QVector3D& position) const;
     /*!
      * \brief Returns seed which was used for simplex noise generation
      * \return          seed

@@ -20,8 +20,7 @@ CTerrainMesh::CTerrainMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textur
         //TODO: process this error
     }
 
-    m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(seed));
-    m_heightmap->generate(CSettings::details() * CSettings::details() * CUBE_FACES);
+    m_heightmap = QSharedPointer<CPlanetHeightmap>(new CPlanetHeightmap(seed, CSettings::details() * CSettings::details() * CUBE_FACES));
     m_sphere_radius = radius;
 }
 
@@ -65,6 +64,9 @@ void CTerrainMesh::_create_sphere_faces() {
             position.setZ(1 - ((qreal)v / (qreal)(CSettings::details() - 1) * 2.0));
             m_vertices_position.append(position);
             m_cube_face_num.append(6);
+
+            //heightmap generation
+            m_heightmap->set_pixel(u, v);
         }
     }
 
