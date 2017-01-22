@@ -7,6 +7,7 @@
 #include "iserializable.h"
 #include "csimplexnoise.h"
 #include "csettings.h"
+#include "utility.h"
 
 /*!
  * \brief The CPlanetHeightmap class
@@ -24,7 +25,7 @@ private:
 
 public:
     CPlanetHeightmap(int seed, int size);
-    CPlanetHeightmap(const QString& path, const QSharedPointer<CSettings>& settings);
+    CPlanetHeightmap(const QString& path);
     /*!
      * \brief Saves all current heightmap data
      * \param           filename            file which will contain the heilghtmap
@@ -35,7 +36,7 @@ public:
      * \param       x       x-coordinate of the pixel
      * \param       y       y-coordinate of the pixel
      */
-    void set_pixel(int x, int y);
+    void set_pixel(int x, int y, Math::ECubeFace face);
     /*!
      * \brief Returns heightmap size
      * \return          heightmap size

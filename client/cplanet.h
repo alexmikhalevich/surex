@@ -6,10 +6,11 @@
 #include <qt5/QtGui/QImage>
 #include "CDLOD/cterrain.h"
 #include "CDLOD/cselection.h"
-#include "cterrainmesh.h"
+#include "cterrainmeshchunk.h"
 #include "irenderable.h"
 #include "csettings.h"
 #include "ccamera.h"
+#include "cplanetheightmap.h"
 
 /*!
  * \brief The CPlanet class
@@ -18,13 +19,16 @@
 class CPlanet : public IRenderable, public ISerializable
 {
 private:
-    QScopedPointer<CTerrainMesh> m_terrain_mesh;                      ///< Terrain mesh
+    QScopedPointer<CTerrainMeshChunk> m_terrain_mesh;                 ///< Terrain mesh
     QSharedPointer<CCamera> m_camera;                                 ///< Camera object, necessary for the CDLOD algorithm
+    QOpenGLShaderProgram m_shader_program;
+    QVector<QSharedPointer<QOpenGLTexture>> m_textures;               ///< Planet textures
+    QSharedPointer<CPlanetHeightmap> m_heightmap;
     qreal m_radius;                                                   ///< Planet radius
 
+    void _load_textures();
 public:
-    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QVector<QSharedPointer<QOpenGLTexture> >& textures);
-    CPlanet(const QSharedPointer<CCamera>& camera_ptr, const QVector<QSharedPointer<QOpenGLTexture> >& textures, int seed);
+    CPlanet(const QSharedPointer<CCamera>& camera_ptr, int seed = 0);
     /*!
      * \brief Render planet
      */

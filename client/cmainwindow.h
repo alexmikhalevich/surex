@@ -13,7 +13,7 @@ class CMainWindow : public QWindow, protected QOpenGLFunctions {
 private:
     QSharedPointer<CSettings> m_settings;
     QSharedPointer<CRenderer> m_renderer;
-    QSharedPointer<CScene> m_scene;
+    QScopedPointer<CScene> m_scene;
     bool m_update_pending;
 protected:
     bool event(QEvent* event);

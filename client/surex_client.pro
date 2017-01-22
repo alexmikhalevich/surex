@@ -8,25 +8,21 @@ SOURCES += main.cpp \
     ccamera.cpp \
     CDLOD/cquadtree.cpp \
     CDLOD/cquadtreenode.cpp \
-    CDLOD/cselection.cpp \
     utility.cpp \
-    CDLOD/cterrain.cpp \
     cmesh.cpp \
     crenderer.cpp \
     cscene.cpp \
     cplanetheightmap.cpp \
     cplanet.cpp \
     csimplexnoise.cpp \
-    cterrainmesh.cpp
+    cterrainmeshchunk.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
     ccamera.h \
     CDLOD/cquadtree.h \
     CDLOD/cquadtreenode.h \
-    CDLOD/cselection.h \
     utility.h \
-    CDLOD/cterrain.h \
     cmesh.h \
     crenderer.h \
     cscene.h \
@@ -34,8 +30,8 @@ HEADERS += cmainwindow.h \
     cplanet.h \
     iserializable.h \
     csimplexnoise.h \
-    cterrainmesh.h \
-    irenderable.h
+    irenderable.h \
+    cterrainmeshchunk.h
 
 DISTFILES += \
     shaders/planet.frag \

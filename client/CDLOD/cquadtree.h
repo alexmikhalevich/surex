@@ -3,35 +3,36 @@
 
 #include <qt5/QtCore/QScopedPointer>
 #include "csettings.h"
-#include "cselection.h"
 #include "cquadtreenode.h"
 #include "utility.h"
 
-namespace CDLOD {
+namespace LOD {
     /*!
      * \brief The CQuadtree class
      * Quadtree implementation.
      */
     class CQuadtree {
     private:
-        //QScopedPointer<CQuadtreeNode> m_root;       ///< Pointer to the root node in the tree
-        QVector<qreal> m_lod_vis_distance_ratios;   ///< LOD visibility range distribution
-        QSharedPointer<CSelection> m_selection;     ///< CSelection instance which contains all information needed to render the terrain
-        /*!
-         * \brief Cleans all CQuadtree stuff
-         */
-        void _clean();
+        QScopedPointer<CQuadtreeNode> m_root;                         ///< Pointer to the root node in the tree
+        QVector<qreal> m_lod_vis_distance_ratios;                     ///< LOD visibility range distribution
+        int m_xvert;
+        int m_yvert;
+        QSharedPointer<QOpenGLShaderProgram> m_shader_program;
+        QVector<QSharedPointer<QOpenGLTexture>> m_textures;
+        QSharedPointer<CPlanetHeightmap> m_heightmap;
     public:
-        CQuadtree(QSharedPointer<CSelection>& selection) : m_selection(selection) {}
+        CQuadtree(int x_vert, int y_vert, const QSharedPointer<QOpenGLShaderProgram>& shader_program,
+                  const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QSharedPointer<CPlanetHeightmap>& heightmap);
         /*!
          * \brief           Initialises the tree
          * \param[in]       settings_ptr        different system settings
          */
-        void init(QSharedPointer<CSettings>& settings_ptr);
+        void init();
         /*!
          * \brief           Launches a recursive tree traversal
+         * \param[out]      selection           selected area representation
          */
-        void select();
+        void select(Math::ECubeFace face, float min_height, float max_height, float radius);
     };
 }
 

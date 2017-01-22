@@ -1,7 +1,7 @@
 attribute vec3 vertex;
 attribute vec2 heightmap_coords;
 attribute vec2 vertex_tex_coords;
-attribute int cube_face_num;
+
 
 uniform mat4 qt_ModelViewProjectionMatrix;
 uniform sampler2D heightmap;
@@ -11,6 +11,7 @@ uniform float morph_val;
 uniform float min_height;
 uniform float max_height;
 uniform vec2 grid_dim;
+uniform int cube_face_num;
 
 varying vec3 vertex_normal;
 varying vec3 mapped_vertex;

@@ -21,8 +21,9 @@ CPlanetHeightmap::CPlanetHeightmap(const QString& path) {
     m_height_max = settings->max_height();
 }
 
-void CPlanetHeightmap::set_pixel(int x, int y) {
+void CPlanetHeightmap::set_pixel(int x, int y, Math::ECubeFace face) {
     //TODO: replace with 2D simplex noise
+    //TODO: use face to compute coordinates on the heightmap
     int col = CSimplexNoise::scaled_octave_noise_3d(CSettings::noise_octaves(), CSettings::noise_persistence(),
                                                     CSettings::noise_scale(), 0, 255, x, y, 1);
     m_heightmap.setPixelColor(x, y, QColor(col, col, col));

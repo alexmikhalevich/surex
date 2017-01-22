@@ -4,7 +4,7 @@ CMainWindow::CMainWindow(QWindow* parent) : QWindow(parent), m_update_pending(fa
     setSurfaceType(QWindow::OpenGLSurface);
     m_settings.reset(new CSettings);
     m_renderer = QSharedPointer<CRenderer>(new CRenderer(size(), this));
-    m_scene = QSharedPointer<CScene>(new CScene());
+    m_scene.reset(new CScene());
 
     initialize();
 }
@@ -18,7 +18,7 @@ void CMainWindow::render(QPainter* painter) {
 
 void CMainWindow::render() {
     m_renderer->render_scene(m_scene);
-    QPainter painter(m_renderer->device());
+    QPainter painter(m_renderer->device().data());
     render(&painter);
 }
 

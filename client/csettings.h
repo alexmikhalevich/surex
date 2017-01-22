@@ -15,25 +15,29 @@ private:
     static short m_max_lod_level;                              ///< Maximum LOD value
     static qreal m_lod_level_distance_ratio;                   ///< The number of times at which decreases rendering detail with increasing LOD
     static QVector<qreal> m_visibility_ranges;                 ///<
-    static int m_details;                                      ///< The amount of vertices per one unit cube's edge
+    static int m_details;                                      ///< The minimum amount of vertices per one unit cube's edge
     static qreal m_noise_scale;                                ///< Simplex noise scale
     static qreal m_noise_persistence;                          ///< Simplex noise persistence
     static int m_noise_octaves;                                ///< Simplex noise octaves
     static float m_max_height;                                 ///< Max terrain height
     static float m_min_height;                                 ///< Min terrain height
+    static qreal m_min_radius;                                 ///< Min planet radius
+    static qreal m_max_radius;                                 ///< Max planet radius
 public:
     CSettings();
-    static int samples_num() const;
-    static int max_selection_size() const;
-    static short max_lod_level() const;
-    static qreal visibility_range(short level) const;
-    static qreal lod_level_distance_ratio() const;
-    static int details() const;
-    static double noise_scale() const;
-    static double noise_persistence() const;
-    static int noise_octaves() const;
-    static float max_height() const;
-    static float min_height() const;
+    static int samples_num();
+    static int max_selection_size();
+    static short max_lod_level();
+    static qreal visibility_range(short level);
+    static qreal lod_level_distance_ratio();
+    static int details();
+    static double noise_scale();
+    static double noise_persistence();
+    static int noise_octaves();
+    static float max_height();
+    static float min_height();
+    static qreal min_radius();
+    static qreal max_radius();
 };
 
 #endif // CSETTINGS_H

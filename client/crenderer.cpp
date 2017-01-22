@@ -1,6 +1,6 @@
 #include "crenderer.h"
 
-CRenderer::CRenderer(const QSize& window_size, QObject* context_parent = nullptr, const QSharedPointer<CSettings>& settings) {
+CRenderer::CRenderer(const QSize& window_size, QObject* context_parent = nullptr) {
     m_window_ptr = context_parent;
 
     m_device.reset(new QOpenGLPaintDevice);

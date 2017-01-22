@@ -21,7 +21,7 @@ private:
     QScopedPointer<QOpenGLPaintDevice> m_device;
     QObject* m_window_ptr;
 public:
-    CRenderer(const QSize& window_size, QObject* context_parent, const QSharedPointer<CSettings>& settings);
+    CRenderer(const QSize& window_size, QObject* context_parent);
     /*!
      * \brief Render scene
      * \param[in]           scene_ptr           pointer to the scene instance which will be rendered

@@ -57,7 +57,7 @@ protected:
     QOpenGLBuffer m_vbo_texture_coords;                             ///< Vertex buffer object for texture coordinates
     QVector<QSharedPointer<QOpenGLTexture>> m_textures;             ///< Textures of the current mesh
     QOpenGLVertexArrayObject m_vao;                                 ///< Vertex array object
-    QOpenGLShaderProgram m_shader_program;                          ///< Shader program for the current mesh
+    QSharedPointer<QOpenGLShaderProgram> m_shader_program;          ///< Shader program for the current mesh
 private:
     //QOpenGLBuffer m_vbo_normal;                                     ///< Vertex buffer object for normals
     //QOpenGLBuffer m_ibo;                                            ///< Index buffer object
@@ -78,6 +78,7 @@ private:
     bool _init_buffer(QOpenGLBuffer& buffer, const QVector<SVertexType>& data, const QString& buffer_id, int tuple_size, GLenum gl_type);
 public:
     CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader);
+    CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture>>& textures);
     /*!
      * \brief   Inits all buffers
      * \param               vertices_position   vertex buffer
@@ -85,7 +86,7 @@ public:
      * \param               indices             index buffer
      * \return                                  operation status: false if any buffer creation operation fails
      */
-    virtual bool init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexTextureCoords>& vertices_tex_coords
+    bool init(const QVector<SVertexPosition>& vertices_position, const QVector<SVertexTextureCoords>& vertices_tex_coords
               /*, const QVector<unsigned int>& indices*/);
     /*!
      * \brief     Render mesh

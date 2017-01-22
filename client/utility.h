@@ -5,13 +5,26 @@
 #include <qt5/QtGui/QMatrix4x4>
 
 namespace Math {
+    /*!
+     * \brief The ECubeFace enum
+     * Represents the unity cube faces
+     */
+    enum ECubeFace {
+        XY_NEGATIVE = 0,
+        XZ_NEGATIVE = 1,
+        YZ_NEGATIVE = 2,
+        XY_POSITIVE = 3,
+        XZ_POSITIVE = 4,
+        YZ_POSITIVE = 5
+    };
+
     class CPlane {
     private:
         QVector3D m_normal;
         qreal m_distance;
     public:
-        CPlane() : m_normal(QVector3D(0.0, 0.0, 0.0)), m_distance(QVector3D(0.0, 0.0, 0.0)) {}
-        CPlane(const QVector3D& normal, const QVector3D distance) : m_normal(normal), m_distance(distance) {}
+        CPlane() : m_normal(QVector3D(0.0, 0.0, 0.0)), m_distance(0.0) {}
+        CPlane(const QVector3D& normal, qreal distance) : m_normal(normal), m_distance(distance) {}
         ~CPlane() {}
         void set_normal(const QVector3D& normal);
         void set_distance(qreal distance);

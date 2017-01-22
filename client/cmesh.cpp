@@ -18,6 +18,11 @@ CMesh::CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QStr
     m_textures = textures;
 }
 
+CMesh::CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture> >& textures) {
+    m_shader_program = shader_program;
+    m_textures = textures;
+}
+
 template<class SVertexType>
 bool CMesh::_init_buffer(const QOpenGLBuffer& buffer, const QVector<SVertexType>& data, const QString& buffer_id, int tuple_size, GLenum gl_type) {
     if(!buffer.create())

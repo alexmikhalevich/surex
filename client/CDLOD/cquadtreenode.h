@@ -2,9 +2,9 @@
 #define CQUADTREENODE_H
 
 #include <qt5/QtCore/qmath.h>
-#include "cselection.h"
+#include "cterrainmeshchunk.h"
 
-namespace CDLOD {
+namespace LOD {
     /*!
      * \brief The ESelectionResult enum
      * Represents the status of the select operation
@@ -22,17 +22,41 @@ namespace CDLOD {
      */
     class CQuadtreeNode {
     private:
-        QScopedPointer<CQuadtreeNode> m_top_left;
-        QScopedPointer<CQuadtreeNode> m_bottom_left;
-        QScopedPointer<CQuadtreeNode> m_top_right;
-        QScopedPointer<CQuadtreeNode> m_bottom_right;
+        QScopedPointer<CQuadtreeNode> m_top_left;               ///< Top left child
+        QScopedPointer<CQuadtreeNode> m_bottom_left;            ///< Bottom left child
+        QScopedPointer<CQuadtreeNode> m_top_right;              ///< Top right child
+        QScopedPointer<CQuadtreeNode> m_bottom_right;           ///< Bottom right child
+        static Math::ECubeFace m_face;                          ///< The number of processed cube face
+        static float m_min_height;                              ///< Min height, possible on this planet (normalized)
+        static float m_max_height;                              ///< Max height, possible on this planet (normalized)
+        static QSharedPointer<CTerrainMeshChunk> m_mesh_chunk;  ///< Mesh chunk which corresponds to the current node
 
-        Math::CBoundingBox _bounding_box(int xsize, int ysize);
-    public:
-        CQuadtreeNode() {}
         /*!
-         * Recursively traverses the quadtree to create a subset of nodes representing the currently observable part of the terrain
-         * \param[out]  selection          CSelection instance which contains all information needed to render the terrain
+         * \brief Returns the bounding box for the terrain chunk, which corresponds to the current plane chunk
+         * \param[in]       x       x-coordinate of the top left on the plane
+         * \param[in]       y       y-coordinate of the top left on the plane
+         * \param[in]       size    length of the 2D bounding box side
+         * \return          bounding box for the terrain chunk
+         */
+        Math::CBoundingBox _get_bounding_box(int x, int y, int size) const;
+
+        /*!
+         * \brief Generates mesh grid
+         * \param[in]   x_vert          number of vertices, generated along the x-axis
+         * \param[in]   y_vert          number of vertices, generated along the y-axis
+         * \param[in]   shader_program  shader program object instance
+         * \param[in]   textures        textures which will be used for this chunk
+         * \param[in]   heightmap       heightmap
+         * \return                      operation status
+         */
+        bool _generate_mesh_chunk(int x_vert, int y_vert, QSharedPointer<QOpenGLShaderProgram>& shader_program,
+                                  const QVector<QSharedPointer<QOpenGLTexture> >& textures,
+                                  const QSharedPointer<CPlanetHeightmap>& heightmap);
+    public:
+        CQuadtreeNode(Math::ECubeFace face, float min_height, float max_height, float radius);
+        /*!
+         * Recursively traverses the quadtree to render only visible parts of the terrain mesh.
+         * If argument is not listed here, look for CQuadtreeNode::_generate_mesh_chunk() method.
          * \param[in]   parent_in_frustum  flag which shows if the parent node is in frustum
          * \param[in]   x                  x-coordinate of the top-left corner of the parent node
          * \param[in]   y                  y-coordinate of the top-left corner of the parent node
@@ -40,7 +64,10 @@ namespace CDLOD {
          * \param[in]   size               size of the parent node's bounding square
          * \return                         operation status
          */
-        ESelectionResult select(CSelection& selection, bool parent_in_frustum, int x, int y, int lod, size_t size);
+        ESelectionResult select(bool parent_in_frustum, int x, int y, short lod, int size,
+                                int x_vert, int y_vert, QSharedPointer<QOpenGLShaderProgram>& shader_program,
+                                const QVector<QSharedPointer<QOpenGLTexture> >& textures,
+                                const QSharedPointer<CPlanetHeightmap>& heightmap);
     };
 }
 
