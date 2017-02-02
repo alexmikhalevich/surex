@@ -74,6 +74,7 @@ namespace Math {
     };
 
     class CCollision {
+    public:
         enum ECollisionType {
             CONTAINS,
             INTERSECTS,

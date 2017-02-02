@@ -2,7 +2,9 @@
 #define CQUADTREENODE_H
 
 #include <qt5/QtCore/qmath.h>
+#include <qt5/QtCore/QSharedPointer>
 #include "cterrainmeshchunk.h"
+#include "ccamera.h"
 
 namespace LOD {
     /*!
@@ -30,6 +32,8 @@ namespace LOD {
         static float m_min_height;                              ///< Min height, possible on this planet (normalized)
         static float m_max_height;                              ///< Max height, possible on this planet (normalized)
         static QSharedPointer<CTerrainMeshChunk> m_mesh_chunk;  ///< Mesh chunk which corresponds to the current node
+        static QSharedPointer<CCamera> m_camera;                ///< Camera object
+        static int m_selection_size;                            ///< Current selection size
 
         /*!
          * \brief Returns the bounding box for the terrain chunk, which corresponds to the current plane chunk
@@ -53,7 +57,7 @@ namespace LOD {
                                   const QVector<QSharedPointer<QOpenGLTexture> >& textures,
                                   const QSharedPointer<CPlanetHeightmap>& heightmap);
     public:
-        CQuadtreeNode(Math::ECubeFace face, float min_height, float max_height, float radius);
+        CQuadtreeNode(Math::ECubeFace face, float min_height, float max_height, float radius, const QSharedPointer<CCamera>& camera);
         /*!
          * Recursively traverses the quadtree to render only visible parts of the terrain mesh.
          * If argument is not listed here, look for CQuadtreeNode::_generate_mesh_chunk() method.

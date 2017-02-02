@@ -4,6 +4,8 @@
 #define CUBE_FACES 6
 #define HEIGHTMAP_TEXTURE_OFFSET 1
 
+#include <qt5/QtCore/QSharedPointer>
+#include <qt5/QtGui/QOpenGLFunctions>
 #include "irenderable.h"
 #include "cmesh.h"
 #include "cplanetheightmap.h"
@@ -19,6 +21,7 @@ private:
     QString m_init_error;                                             ///< Initialization error
     QVector<SVertexPosition> m_vertices_position;                     ///< Vertex buffer
     QVector<SVertexTextureCoords> m_vert_tex_coords;                  ///< Texture coordinates buffer
+    QSharedPointer<QOpenGLContext> m_context;                         ///< OpenGL context
 
     /*!
      * \brief Generates unit cube grid
@@ -34,16 +37,17 @@ private:
 public:
     CTerrainMeshChunk(const QSharedPointer<QOpenGLShaderProgram>& shader_program,
                       const QVector<QSharedPointer<QOpenGLTexture> >& textures,
-                      const QSharedPointer<CPlanetHeightmap>& heightmap);
+                      const QSharedPointer<CPlanetHeightmap>& heightmap,
+                      const QSharedPointer<QOpenGLContext>& context);
+    virtual ~CTerrainMeshChunk() {}
     /*!
      * \brief Creates all buffers
      * \param[in]   x_vert          number of vertices, generated along the x-axis
      * \param[in]   y_vert          number of vertices, generated along the y-axis
      * \param[in]   cube_face       number of cube's face
-     * \param[in]   shader_program  shader program object instance
-     * \param[in]   textures        textures which will be used for this chunk
+     * \param[in]   radius          planet radius
      */
-    bool create(int x_vert, int y_vert, Math::ECubeFace cube_face);
+    bool create(int x_vert, int y_vert, Math::ECubeFace cube_face, int radius);
     /*!
      * \brief Renders this terrain mesh chunk
      */

@@ -2,25 +2,27 @@
 
 using namespace LOD;
 
-CQuadtreeNode::CQuadtreeNode(Math::ECubeFace face, float min_height, float max_height, float radius) {
+CQuadtreeNode::CQuadtreeNode(Math::ECubeFace face, float min_height, float max_height, float radius, const QSharedPointer<CCamera>& camera) {
     m_face = face;
     m_min_height = min_height / radius;
     m_max_height = max_height / radius;
+    m_camera = camera;
+    m_selection_size = 0;
 }
 
 Math::CBoundingBox CQuadtreeNode::_get_bounding_box(int x, int y, int size) const {
     Math::CBoundingBox result;
-    if(face == ECubeFace::XY_NEGATIVE)
+    if(m_face == Math::ECubeFace::XY_NEGATIVE)
         result = Math::CBoundingBox(QVector3D(x, y, -1 + m_min_height), QVector3D(x + size, y + size, -1 - m_max_height));
-    else if(face == ECubeFace::XY_POSITIVE)
+    else if(m_face == Math::ECubeFace::XY_POSITIVE)
         result = Math::CBoundingBox(QVector3D(x, y, 1 - m_min_height), QVector3D(x + size, y + size, 1 + m_max_height));
-    else if(face == ECubeFace::XZ_NEGATIVE)
+    else if(m_face == Math::ECubeFace::XZ_NEGATIVE)
         result = Math::CBoundingBox(QVector3D(x, -1 + m_min_height, y), QVector3D(x + size, -1 - m_max_height, y + size));
-    else if(face == ECubeFace::XZ_POSITIVE)
+    else if(m_face == Math::ECubeFace::XZ_POSITIVE)
         result = Math::CBoundingBox(QVector3D(x, 1 - m_min_height, y), QVector3D(x + size, 1 + m_max_height, y + size));
-    else if(face == ECubeFace::YZ_NEGATIVE)
+    else if(m_face == Math::ECubeFace::YZ_NEGATIVE)
         result = Math::CBoundingBox(QVector3D(-1 + m_min_height, y, x), QVector3D(-1 + m_max_height, y + size, x + size));
-    else if(face == ECubeFace::YZ_POSITIVE)
+    else if(m_face == Math::ECubeFace::YZ_POSITIVE)
         result = Math::CBoundingBox(QVector3D(1 - m_min_height, y, x), QVector3D(1 - m_max_height, y + size, x + size));
     return result;
 }
@@ -28,7 +30,7 @@ Math::CBoundingBox CQuadtreeNode::_get_bounding_box(int x, int y, int size) cons
 bool CQuadtreeNode::_generate_mesh_chunk(int x_vert, int y_vert, QSharedPointer<QOpenGLShaderProgram>& shader_program,
                                          const QVector<QSharedPointer<QOpenGLTexture> >& textures,
                                          const QSharedPointer<CPlanetHeightmap>& heightmap) {
-    m_mesh_chunk = QSharedPointer(new CTerrainMeshChunk(shader_program, textures, heightmap));
+    m_mesh_chunk = QSharedPointer<CTerrainMeshChunk>(new CTerrainMeshChunk(shader_program, textures, heightmap));
     return m_mesh_chunk->create(x_vert, y_vert, m_face);
 }
 
@@ -38,12 +40,12 @@ ESelectionResult CQuadtreeNode::select(bool parent_in_frustum, int x, int y, sho
                                        const QSharedPointer<CPlanetHeightmap>& heightmap) {
     Math::CBoundingBox bounding_box = _get_bounding_box(x, y, size);
     Math::CCollision::ECollisionType frustum_collision = parent_in_frustum ? Math::CCollision::ECollisionType::CONTAINS
-                                                                           : Math::CCollision::contains(bounding_box, selection.camera_frustum());
+                                                                           : Math::CCollision::contains(bounding_box, m_camera->frustum());
     if(frustum_collision == Math::CCollision::ECollisionType::NONE) {
         return ESelectionResult::OUT_OF_FRUSTUM;
     }
-    qreal distance_limit = selection.visibiliry_range(m_level);
-    if(!Math::CCollision::intersects(bounding_box, Math::CBoundingSphere(selection.observer_position(), distance_limit))) {
+    qreal distance_limit = CSettings::visibility_range(lod);
+    if(!Math::CCollision::intersects(bounding_box, Math::CBoundingSphere(m_camera->position(), distance_limit))) {
         return ESelectionResult::OUT_OF_RANGE;
     }
 
@@ -51,9 +53,9 @@ ESelectionResult CQuadtreeNode::select(bool parent_in_frustum, int x, int y, sho
     ESelectionResult top_right_result = ESelectionResult::UNDEFINED;
     ESelectionResult bottom_left_result = ESelectionResult::UNDEFINED;
     ESelectionResult bottom_right_result = ESelectionResult::UNDEFINED;
-    if(m_level != selection.max_lod_level()) {
-        qreal next_distance_limit =  selection.visibiliry_range(m_level + 1);
-        if(Math::CCollision::intersects(bounding_box, Math::CBoundingSphere(selection.observer_position(), next_distance_limit))) {
+    if(lod != CSettings::max_lod_level()) {
+        qreal next_distance_limit =  CSettings::visibility_range(lod + 1);
+        if(Math::CCollision::intersects(bounding_box, Math::CBoundingSphere(m_camera->position(), next_distance_limit))) {
             bool in_frustum = (frustum_collision == Math::CCollision::ECollisionType::CONTAINS);
             if(!m_top_left.isNull())
                 top_left_result = m_top_left->select(in_frustum, x, y, lod - 1, size / 2, x_vert, y_vert, shader_program,
@@ -79,7 +81,7 @@ ESelectionResult CQuadtreeNode::select(bool parent_in_frustum, int x, int y, sho
     bool remove_bottom_right = (bottom_right_result == ESelectionResult::OUT_OF_FRUSTUM)
             || (bottom_right_result == ESelectionResult::SELECTED);
     if(!(remove_top_left && remove_top_right && remove_bottom_left && remove_bottom_right)
-            && selection.selection_size() < selection.max_selection_size()) {
+            && m_selection_size < CSettings::max_selection_size()) {
         if(m_mesh_chunk.isNull()) {
             if(!_generate_mesh_chunk(x_vert, y_vert, shader_program, textures, heightmap)) {
                 //TODO: process this error
@@ -87,6 +89,7 @@ ESelectionResult CQuadtreeNode::select(bool parent_in_frustum, int x, int y, sho
         }
         m_mesh_chunk->set_scale(size);
         m_mesh_chunk->render();
+        ++m_selection_size;
         return ESelectionResult::SELECTED;
     }
     if(top_left_result == ESelectionResult::SELECTED || top_right_result == ESelectionResult::SELECTED

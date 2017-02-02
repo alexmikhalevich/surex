@@ -17,7 +17,7 @@
 class CRenderer
 {
 private:
-    QScopedPointer<QOpenGLContext> m_context;
+    QSharedPointer<QOpenGLContext> m_context;
     QScopedPointer<QOpenGLPaintDevice> m_device;
     QObject* m_window_ptr;
 public:

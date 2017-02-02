@@ -49,10 +49,10 @@ float CSettings::min_height() {
     return m_min_height;
 }
 
-qreal CSettings::min_radius() {
+int CSettings::min_radius() {
     return m_min_radius;
 }
 
-qreal CSettings::max_radius() {
+int CSettings::max_radius() {
     return m_max_radius;
 }

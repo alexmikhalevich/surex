@@ -21,8 +21,8 @@ private:
     static int m_noise_octaves;                                ///< Simplex noise octaves
     static float m_max_height;                                 ///< Max terrain height
     static float m_min_height;                                 ///< Min terrain height
-    static qreal m_min_radius;                                 ///< Min planet radius
-    static qreal m_max_radius;                                 ///< Max planet radius
+    static int m_min_radius;                                   ///< Min planet radius
+    static int m_max_radius;                                   ///< Max planet radius
 public:
     CSettings();
     static int samples_num();
@@ -36,8 +36,8 @@ public:
     static int noise_octaves();
     static float max_height();
     static float min_height();
-    static qreal min_radius();
-    static qreal max_radius();
+    static int min_radius();
+    static int max_radius();
 };
 
 #endif // CSETTINGS_H

@@ -26,6 +26,7 @@ private:
 public:
     CPlanetHeightmap(int seed, int size);
     CPlanetHeightmap(const QString& path);
+    virtual ~CPlanetHeightmap() {}
     /*!
      * \brief Saves all current heightmap data
      * \param           filename            file which will contain the heilghtmap

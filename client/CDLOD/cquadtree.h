@@ -20,19 +20,23 @@ namespace LOD {
         QSharedPointer<QOpenGLShaderProgram> m_shader_program;
         QVector<QSharedPointer<QOpenGLTexture>> m_textures;
         QSharedPointer<CPlanetHeightmap> m_heightmap;
+        QSharedPointer<CCamera> m_camera;                             ///< Camera object
     public:
         CQuadtree(int x_vert, int y_vert, const QSharedPointer<QOpenGLShaderProgram>& shader_program,
-                  const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QSharedPointer<CPlanetHeightmap>& heightmap);
+                  const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QSharedPointer<CPlanetHeightmap>& heightmap,
+                  const QSharedPointer<CCamera>& camera);
         /*!
          * \brief           Initialises the tree
-         * \param[in]       settings_ptr        different system settings
          */
         void init();
         /*!
          * \brief           Launches a recursive tree traversal
-         * \param[out]      selection           selected area representation
+         * \param[in]       face                cube face identifier
+         * \param[in]       min_height          minimum planet height
+         * \param[in]       max_height          maximum planet height
+         * \param[in]       radius              planet radius
          */
-        void select(Math::ECubeFace face, float min_height, float max_height, float radius);
+        void select(Math::ECubeFace face, float min_height, float max_height, int radius);
     };
 }
 
