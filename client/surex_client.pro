@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     cplanetheightmap.cpp \
     cplanet.cpp \
     csimplexnoise.cpp \
-    cterrainmeshchunk.cpp
+    cterrainmeshchunk.cpp \
+    cmainengine.cpp
 
 HEADERS += cmainwindow.h \
     csettings.h \
@@ -31,7 +32,8 @@ HEADERS += cmainwindow.h \
     iserializable.h \
     csimplexnoise.h \
     irenderable.h \
-    cterrainmeshchunk.h
+    cterrainmeshchunk.h \
+    cmainengine.h
 
 DISTFILES += \
     shaders/planet.frag \
