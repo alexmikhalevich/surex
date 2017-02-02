@@ -1,36 +1,42 @@
 #include "cmesh.h"
 
-CMesh::CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader) {
+CMesh::CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader,
+             const QSharedPointer<QOpenGLContext>& context) {
 
     m_init_status = true;
     m_init_error = "";
-    if(!m_shader_program.addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_shader)) {
+    m_shader_program = QSharedPointer<QOpenGLShaderProgram>(new QOpenGLShaderProgram);
+
+    if(!m_shader_program->addShaderFromSourceFile(QOpenGLShader::Vertex, vertex_shader)) {
         m_init_status = false;
         m_init_error += "EE: Unable to compile vertex shader " + vertex_shader + ".";
     }
-    if(!m_shader_program.addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_shader)) {
+    if(!m_shader_program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragment_shader)) {
         m_init_status = false;
-        m_init_error += "EE: Unable to compile fragment shader " + fragment_shader = ".";
+        m_init_error += "EE: Unable to compile fragment shader " + fragment_shader + ".";
     }
     if(!m_init_status)
         return;
 
     m_textures = textures;
+    m_context = context;
 }
 
-CMesh::CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture> >& textures) {
+CMesh::CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture> >& textures,
+             const QSharedPointer<QOpenGLContext>& context) {
     m_shader_program = shader_program;
     m_textures = textures;
+    m_context = context;
 }
 
 template<class SVertexType>
-bool CMesh::_init_buffer(const QOpenGLBuffer& buffer, const QVector<SVertexType>& data, const QString& buffer_id, int tuple_size, GLenum gl_type) {
+bool CMesh::_init_buffer(QOpenGLBuffer& buffer, const QVector<SVertexType>& data, const QString& buffer_id, int tuple_size, GLenum gl_type) {
     if(!buffer.create())
         return false;
     buffer.bind();
-    buffer.allocate(data.constData(), data.size() * sizeof(SVertexType));
-    m_shader_program.enableAttributeArray(buffer_id);
-    m_shader_program.setAttributeBuffer(buffer_id, gl_type, 0, tuple_size);
+    buffer.allocate(data.constData(), data.size() * static_cast<int>(sizeof(SVertexType)));
+    m_shader_program->enableAttributeArray(buffer_id.toStdString().c_str());
+    m_shader_program->setAttributeBuffer(buffer_id.toStdString().c_str(), gl_type, 0, tuple_size);
     return true;
 }
 
@@ -87,18 +93,19 @@ QString CMesh::error() const {
 }
 
 void CMesh::render() {
-    for(size_t i = 0; i < m_textures.size(); ++i) {
-        QOpenGLFunctions::glActiveTexture(m_textures.at(i)->textureId());
-        m_shader_program.setUniformValue("material_" + QString::number(i), i);
+    QOpenGLFunctions opengl_funcs(m_context.data());
+    for(int i = 0; i < m_textures.size(); ++i) {
+        opengl_funcs.glActiveTexture(m_textures.at(i)->textureId());
+        m_shader_program->setUniformValue(("material_" + QString::number(i)).toStdString().c_str(), i);
         m_textures[i]->bind();
     }
-    QOpenGLFunctions::glActiveTexture(GL_TEXTURE0);
+    opengl_funcs.glActiveTexture(GL_TEXTURE0);
 
     m_vao.bind();
-    QOpenGLFunctions::glDrawElements(GL_TRIANGLES, m_indices_size, GL_UNSIGNED_INT, 0);
+    opengl_funcs.glDrawElements(GL_TRIANGLES, m_indices_size, GL_UNSIGNED_INT, 0);
     m_vao.release();
 }
 
-QOpenGLShaderProgram& CMesh::shader() {
+QSharedPointer<QOpenGLShaderProgram> CMesh::shader() {
     return m_shader_program;
 }

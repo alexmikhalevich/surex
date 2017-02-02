@@ -4,6 +4,7 @@
 #include <qt5/QtCore/QVector>
 #include <qt5/QtGui/QOpenGLTexture>
 #include <qt5/QtCore/QScopedPointer>
+#include <qt5/QtCore/QSharedPointer>
 #include <qt5/QtGui/QVector3D>
 #include <qt5/QtGui/QVector2D>
 #include <qt5/QtGui/QOpenGLShaderProgram>
@@ -58,6 +59,7 @@ protected:
     QVector<QSharedPointer<QOpenGLTexture>> m_textures;             ///< Textures of the current mesh
     QOpenGLVertexArrayObject m_vao;                                 ///< Vertex array object
     QSharedPointer<QOpenGLShaderProgram> m_shader_program;          ///< Shader program for the current mesh
+    QSharedPointer<QOpenGLContext> m_context;                       ///< OpenGL context
 private:
     //QOpenGLBuffer m_vbo_normal;                                     ///< Vertex buffer object for normals
     //QOpenGLBuffer m_ibo;                                            ///< Index buffer object
@@ -77,8 +79,11 @@ private:
     template<class SVertexType>
     bool _init_buffer(QOpenGLBuffer& buffer, const QVector<SVertexType>& data, const QString& buffer_id, int tuple_size, GLenum gl_type);
 public:
-    CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader);
-    CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture>>& textures);
+    CMesh(const QVector<QSharedPointer<QOpenGLTexture>>& textures, const QString& vertex_shader, const QString& fragment_shader,
+          const QSharedPointer<QOpenGLContext>& context);
+    CMesh(const QSharedPointer<QOpenGLShaderProgram>& shader_program, const QVector<QSharedPointer<QOpenGLTexture>>& textures,
+          const QSharedPointer<QOpenGLContext>& context);
+    virtual ~CMesh() {}
     /*!
      * \brief   Inits all buffers
      * \param               vertices_position   vertex buffer
@@ -106,7 +111,7 @@ public:
      * \brief Returns reference to the shader program instance
      * \return
      */
-    QOpenGLShaderProgram& shader();
+    QSharedPointer<QOpenGLShaderProgram> shader();
 };
 
 #endif // CMESH_H

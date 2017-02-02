@@ -6,14 +6,13 @@
 #include <qt5/QtGui/QSurfaceFormat>
 #include <qt5/QtCore/QScopedPointer>
 #include "csettings.h"
-#include "crenderer.h"
+#include "cmainengine.h"
 
 class CMainWindow : public QWindow, protected QOpenGLFunctions {
     Q_OBJECT
 private:
-    QSharedPointer<CSettings> m_settings;
-    QSharedPointer<CRenderer> m_renderer;
-    QScopedPointer<CScene> m_scene;
+    QSharedPointer<CMainEngine> m_engine;
+    QSharedPointer<QOpenGLContext> m_context;
     bool m_update_pending;
 protected:
     bool event(QEvent* event);

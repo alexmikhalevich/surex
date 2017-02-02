@@ -2,8 +2,9 @@
 
 CTerrainMeshChunk::CTerrainMeshChunk(const QSharedPointer<QOpenGLShaderProgram>& shader_program,
                                      const QVector<QSharedPointer<QOpenGLTexture> >& textures,
-                                     const QSharedPointer<CPlanetHeightmap>& heightmap, const QSharedPointer<QOpenGLContext>& context)
-    : CMesh(shader_program, textures) {
+                                     const QSharedPointer<CPlanetHeightmap>& heightmap,
+                                     const QSharedPointer<QOpenGLContext>& context)
+    : CMesh(shader_program, textures, context) {
     m_heightmap = heightmap;
     m_context = context;
 }

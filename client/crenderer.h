@@ -17,26 +17,21 @@
 class CRenderer
 {
 private:
-    QSharedPointer<QOpenGLContext> m_context;
-    QScopedPointer<QOpenGLPaintDevice> m_device;
+    QSharedPointer<QOpenGLPaintDevice> m_device;
+    QOpenGLFunctions* m_opengl_funcs;
     QObject* m_window_ptr;
 public:
-    CRenderer(const QSize& window_size, QObject* context_parent);
+    CRenderer(const QSize& window_size, QOpenGLContext* opengl_context);
     /*!
      * \brief Render scene
      * \param[in]           scene_ptr           pointer to the scene instance which will be rendered
      */
-    void render_scene(const QScopedPointer<CScene>& scene_ptr);
+    void render_scene(const QSharedPointer<CScene>& scene_ptr);
     /*!
      * \brief Returns openGL paint device
-     * \return                              pointer to the openGL paint device
+     * \return                                  pointer to the openGL paint device
      */
-    QScopedPointer<QOpenGLPaintDevice> device();
-    /*!
-     * \brief Swap the back and front buffers of surface
-     * \param[in]            surface
-     */
-    void swap_buffers(QSurface* surface);
+    QSharedPointer<QOpenGLPaintDevice> device();
 };
 
 #endif // CRENDERER_H

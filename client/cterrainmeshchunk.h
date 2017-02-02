@@ -21,7 +21,6 @@ private:
     QString m_init_error;                                             ///< Initialization error
     QVector<SVertexPosition> m_vertices_position;                     ///< Vertex buffer
     QVector<SVertexTextureCoords> m_vert_tex_coords;                  ///< Texture coordinates buffer
-    QSharedPointer<QOpenGLContext> m_context;                         ///< OpenGL context
 
     /*!
      * \brief Generates unit cube grid

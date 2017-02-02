@@ -38,7 +38,7 @@ int CPlanetHeightmap::seed() const {
 }
 
 void CPlanetHeightmap::serialize(const QString& filename) {
-    //TODO: serialization
+    //TODO: CPlanetHeightmap serialization
 }
 
 QImage& CPlanetHeightmap::heightmap() {

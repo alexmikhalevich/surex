@@ -2,10 +2,13 @@
 
 CMainWindow::CMainWindow(QWindow* parent) : QWindow(parent), m_update_pending(false) {
     setSurfaceType(QWindow::OpenGLSurface);
-    m_settings.reset(new CSettings);
-    m_renderer = QSharedPointer<CRenderer>(new CRenderer(size(), this));
-    m_scene.reset(new CScene());
 
+    m_context = QSharedPointer<QOpenGLContext>(new QOpenGLContext(this));
+    m_context->setFormat(requestedFormat());
+    m_context->create();
+    m_context->makeCurrent(this);
+
+    m_engine = QSharedPointer<CMainEngine>(new CMainEngine(size(), m_context));
     initialize();
 }
 
@@ -13,18 +16,18 @@ CMainWindow::~CMainWindow() {
 }
 
 void CMainWindow::render(QPainter* painter) {
-	Q_UNUSED(painter);
+    Q_UNUSED(painter);
 }
 
 void CMainWindow::render() {
-    m_renderer->render_scene(m_scene);
-    QPainter painter(m_renderer->device().data());
+    m_engine->render();
+    QPainter painter(m_engine->device().data());
     render(&painter);
 }
 
 void CMainWindow::initialize() {
     QSurfaceFormat surface_format;
-    surface_format.setSamples(m_settings->samples_num());
+    surface_format.setSamples(CSettings::samples_num());
     setFormat(surface_format);
 }
 
@@ -39,7 +42,7 @@ void CMainWindow::renderNow() {
     if(!isExposed())
         return;
     render();
-    m_renderer->swap_buffers(this);
+    m_context->swapBuffers(this);
 }
 
 bool CMainWindow::event(QEvent* event) {
